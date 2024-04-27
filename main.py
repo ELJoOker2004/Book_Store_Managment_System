@@ -14,14 +14,23 @@ def insertRowInTable(name, age):
     conn.commit()
     conn.close()
 
-def printRowInTable(n):
+def deleteRowInTable(id):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    # Insert rows into the table
-    # cursor.execute("INSERT INTO my_table (name, age) VALUES (?, ?)", ("Alice", 30))
+    cursor.execute("DELETE FROM my_table WHERE id = ?", (id,))
+    print(f"Row with ID {id} deleted successfully.")
 
+    # Commit changes and close the connection
+    conn.commit()
+    conn.close()
+
+
+def printRowInTable(n):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
 
     cursor.execute(f"SELECT * FROM my_table WHERE name = ?", (n,))
     row = cursor.fetchone()
@@ -31,7 +40,7 @@ def printRowInTable(n):
         print(f"Name: {row[1]}")
         print(f"Age: {row[2]}")
     else:
-        print("No record found for Alice.")
+        print(f"No record found for {n}.")
 
     # Commit changes and close the connection
     conn.commit()
@@ -49,5 +58,6 @@ if __name__ == '__main__':
     print_hi('PyCharm')
     print("Fuck Omar")
     printRowInTable("Alice")
-    insertRowInTable("eljooker", 19)
+    #insertRowInTable("eljooker", 19)
     printRowInTable("eljooker")
+    deleteRowInTable(2)
