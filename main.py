@@ -12,6 +12,6 @@ if __name__ == '__main__':
     #db.add_user("1","1","test user")
     #db.add_book("Practical Malware Analysis","pma.png",5)
     root = tkk.Window()
-    app = gui.gui(root)
+    app = gui.Gui(root)
     root.mainloop()
 

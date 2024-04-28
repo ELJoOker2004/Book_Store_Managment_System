@@ -3,12 +3,13 @@ from PIL import Image, ImageTk
 from tkinter import ttk
 import os
 import webbrowser
-
+import gui
 
 class Main(object):
-    def __init__(self,master):
-        self.master = master
+    def __init__(self,username,master):
 
+        self.master = master
+        self.username = username
         #frames
         mainFrame= tk.Frame(self.master)
         mainFrame.pack()
@@ -70,7 +71,7 @@ class Main(object):
 
         #hyperlinks for the left side
         def open_link_1():
-            webbrowser.open("https://www.example1.com")  
+            gui.Gui.profile(self.master,self.username)
 
         def open_link_2():
             webbrowser.open("https://www.example2.com")  
@@ -120,6 +121,6 @@ def main():
 
     win.mainloop()
 
-main()
+#main()
 
 #-------------------------------------------
