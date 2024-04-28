@@ -222,7 +222,6 @@ class Gui():
             # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
             # quantity_label.place(x=280, y=85 + i * 60)
 
-
     def admin(self,username):
         self.app.destroy()
         self.frame.destroy()
@@ -306,7 +305,7 @@ class Gui():
             quantity_label.grid(row=i, column=2)
 
             # Create + and - buttons
-            plus_button = tk.Button(scrollable_frame, text="+",font=("Comic Sans MS",10), command=lambda b_id=book_id: db.increase_book(b_id))
+            plus_button = tk.Button(scrollable_frame, text="+",font=("Comic Sans MS",10), command=lambda b_id=book_id: [db.increase_book(b_id),quantity_label.config(text=str(book_quantity))])
             minus_button = tk.Button(scrollable_frame, text="-",font=("Comic Sans MS",10), command=lambda b_id=book_id: db.decrease_book(b_id))
             plus_button.grid(row=i, column=3,padx=1)
             minus_button.grid(row=i, column=4,padx=1)

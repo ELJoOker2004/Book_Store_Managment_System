@@ -198,3 +198,12 @@ def decrease_book(book_id):
     c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
     conn.commit()
     conn.close()
+
+def get_book_quantity(book_id):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT quantity FROM books where id = ?", (book_id,))
+    quantity = c.fetchone()
+    conn.close()
+    #print(quantity)
+    return quantity
