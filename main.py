@@ -1,63 +1,46 @@
+
+import db_functions as db
+
 import test
+import sys
 import sqlite3
 
 
-def insertRowInTable(name, age):
+
+def create_users_table():
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    #Insert rows into the table
-    cursor.execute("INSERT INTO my_table (name, age) VALUES (?, ?)", (name, age))
+    cursor.execute("""
+    CREATE TABLE users (
+        id INTEGER PRIMARY KEY,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL
+    )
+    """)
 
-    # Commit changes and close the connection
     conn.commit()
     conn.close()
 
-def deleteRowInTable(id):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+def main():
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
 
-    cursor.execute("DELETE FROM my_table WHERE id = ?", (id,))
-    print(f"Row with ID {id} deleted successfully.")
-
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
-
-
-def printRowInTable(n):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    cursor.execute(f"SELECT * FROM my_table WHERE name = ?", (n,))
-    row = cursor.fetchone()
-
-    if row:
-        print(f"ID: {row[0]}")
-        print(f"Name: {row[1]}")
-        print(f"Age: {row[2]}")
-    else:
-        print(f"No record found for {n}.")
-
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
+    try:
+        if db.login(username, password):
+            print("Login successful!")
+        else:
+            print("Login failed. Please check your username and password.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
-#sample from korea 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-test.printing();
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    main()
     print("Fuck Omar")
-    printRowInTable("Alice")
+    db.printRowInTable("Alice")
     #insertRowInTable("eljooker", 19)
-    printRowInTable("eljooker")
-    deleteRowInTable(2)
+    db.printRowInTable("eljooker")
+    db.deleteRowInTable(2)
