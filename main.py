@@ -1,3 +1,5 @@
+from tkinter import ttk
+
 import gui
 import ttkbootstrap as tkk
 import db_functions as db
