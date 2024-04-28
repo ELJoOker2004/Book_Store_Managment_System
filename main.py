@@ -1,7 +1,7 @@
-
+import test
 import db_functions as db
 import sqlite3
-
+import tkinter as tk
 
 
 def create_users_table():
@@ -25,11 +25,7 @@ def create_users_table():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    db.add_user("ahmed","1234","elbehiry")
-    db.login()
-    #db.add_user("ahmed","1234")
-    print("Fuck Omar")
-    db.printRowInTable("ahmed")
-    #insertRowInTable("eljooker", 19)
-    db.printRowInTable("eljooker")
-    db.deleteRowInTable("2")
+    root = tk.Tk()
+    app = test.gui(root)
+    root.mainloop()
+
