@@ -51,7 +51,7 @@ class Gui():
             self.tologin_button.destroy()
         self.flag=True
         self.loginWindow.geometry('700x900')
-        self.loginWindow.title('Profile')
+        self.loginWindow.title('Login')
         self.loginWindow.resizable(False, False)
 
         self.app = Application("topbar.gif",25,50,master=self.loginWindow)
@@ -118,7 +118,7 @@ class Gui():
         self.login_button.destroy()
         self.invalid.destroy()
         self.createuser.destroy()
-
+        self.loginWindow.title('Create Account')
         self.app = Application("welcome-anime.gif",22,90, master=self.loginWindow)
         self.app.pack()
 
@@ -172,7 +172,7 @@ class Gui():
         self.password_label.destroy()
         self.login_button.destroy()
         self.invalid.destroy()
-
+        self.loginWindow.title('Profile')
         self.img = Image.open("download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
@@ -230,7 +230,7 @@ class Gui():
         self.password_label.destroy()
         self.login_button.destroy()
         self.invalid.destroy()
-
+        self.loginWindow.title('Admin Page')
         self.img = Image.open("download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
@@ -280,7 +280,7 @@ class Gui():
             # quantity_label.place(x=280, y=85 + i * 60)
     def mainWindow(self,username):
         # frames
-
+        self.loginWindow.title('Market')
         # Top frame
         topFrame = tk.Frame(self.loginWindow, width=1350, height=50, padx=10, relief="sunken", borderwidth=2)
         topFrame.pack()
