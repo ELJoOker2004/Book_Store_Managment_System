@@ -40,6 +40,47 @@ def deleteRowInTable(username):
     conn.close()
 
 
+def searchByUsername(n):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute(f"SELECT * FROM users WHERE username = ?", (n,))
+    row = cursor.fetchone()
+
+    userlist = []
+    userlist.append(row[0])
+    userlist.append(row[2])
+    userlist.append(row[3])
+
+    conn.commit()
+    conn.close()
+
+    if row:
+        return userlist
+    else:
+        return None
+
+    # Commit changes and close the connection
+
+def authenticateUser(username, password):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+    row = cursor.fetchone()
+
+    if row is None:
+        print("No user found with this username.")
+        conn.close()
+        return False
+    elif row[1] == hash_password(password):
+        conn.commit()
+        conn.close()
+        return True
+
+
 def printRowInTable(n):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
@@ -58,8 +99,6 @@ def printRowInTable(n):
     # Commit changes and close the connection
     conn.commit()
     conn.close()
-
-
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
