@@ -1,25 +1,40 @@
 import sqlite3
 import hashlib
-def insertRowInTable(name, age):
+def insertRowInTable(name):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     #Insert rows into the table
-    cursor.execute("INSERT INTO my_table (name, age) VALUES (?, ?)", (name, age))
+    cursor.execute("INSERT INTO users (name) VALUES (?, ?)", (name,))
 
     # Commit changes and close the connection
     conn.commit()
     conn.close()
 
-def deleteRowInTable(id):
+def insertRowInTable(name):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute("DELETE FROM my_table WHERE id = ?", (id,))
-    print(f"Row with ID {id} deleted successfully.")
+    #Insert rows into the table
+    cursor.execute("INSERT INTO users (name) VALUES (?, ?)", (name,))
 
+    # Commit changes and close the connection
+    conn.commit()
+    conn.close()
+
+def deleteRowInTable(username):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM users WHERE username = ?", (username,))
+    user = cursor.fetchone()
+    if user:
+        print(f"Row with username {username} deleted successfully.")
+    else:
+        print(f"couldn't find row with username {username}.")
     # Commit changes and close the connection
     conn.commit()
     conn.close()
@@ -30,13 +45,13 @@ def printRowInTable(n):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    cursor.execute(f"SELECT * FROM my_table WHERE name = ?", (n,))
+    cursor.execute(f"SELECT * FROM users WHERE username = ?", (n,))
     row = cursor.fetchone()
 
     if row:
-        print(f"ID: {row[0]}")
-        print(f"Name: {row[1]}")
-        print(f"Age: {row[2]}")
+
+        print(f"Name: {row[2]}")
+
     else:
         print(f"No record found for {n}.")
 
@@ -48,11 +63,12 @@ def printRowInTable(n):
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-def login(username, password):
+def login():
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
     hashed_password = hash_password(password)
 
     cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, hashed_password))
@@ -60,20 +76,26 @@ def login(username, password):
 
     conn.close()
 
-    if user:
-        return True
-    else:
-        return False
+    try:
+        if user:
+            print("Login successful!")
+        else:
+            print("Login failed. Please check your username and password.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
-def add_user(username, password):
+
+
+def add_user(username, password,name):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     hashed_password = hash_password(password)
 
-    cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_password))
+    cursor.execute("INSERT INTO users (username, password, name) VALUES (?, ?, ?)", (username, hashed_password, name))
 
     conn.commit()
     conn.close()
+
