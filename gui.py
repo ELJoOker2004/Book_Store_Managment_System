@@ -100,3 +100,27 @@ class gui():
         namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
         namelabel.place(x=130, y=45)
 
+        ownedbookslabel = tk.Label(self.loginWindow, text="Owned Books", font=("Arial", 20), fg="black",bg="cyan")
+        ownedbookslabel.place(x=10, y=105)
+
+        booklist = db.get_books()  # This should return a list of tuples with book info
+
+        for i, book in enumerate(booklist):
+            book_name, book_cover, book_quantity = book
+
+            # Create a label to display the book name
+            book_label = tk.Label(self.loginWindow, text=book_name, font=("Comic Sans MS", 15), fg="black")
+            book_label.place(x=150, y=150 + i * 120)
+
+            # Open, resize, and display the book cover
+            img = Image.open(book_cover)
+            img = img.resize((100, 100))  # Resize the image
+            img = ImageTk.PhotoImage(img)
+            img_label = tk.Label(self.loginWindow, image=img)
+            img_label.image = img  # Keep a reference to the image
+            img_label.place(x=20, y=140 + i * 120)
+
+            # Create a label to display the book quantity
+            # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
+            # quantity_label.place(x=280, y=85 + i * 60)
+

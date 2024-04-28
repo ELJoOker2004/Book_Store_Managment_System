@@ -138,3 +138,17 @@ def add_user(username, password,name):
     conn.commit()
     conn.close()
 
+def add_book(name, cover, quantity):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO books (name, cover, quantity) VALUES (?, ?, ?)", (name, cover, quantity))
+    conn.commit()
+    conn.close()
+
+def get_books():
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT name, cover, quantity FROM books")
+    books = c.fetchall()
+    conn.close()
+    return books
