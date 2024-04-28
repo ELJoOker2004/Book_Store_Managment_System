@@ -1,4 +1,4 @@
-import test
+import gui
 import db_functions as db
 import sqlite3
 import tkinter as tk
@@ -10,6 +10,6 @@ import tkinter as tk
 if __name__ == '__main__':
     #db.add_user("ELJoOker","2004","Youssef Ayman Maher")
     root = tk.Tk()
-    app = test.gui(root)
+    app = gui.gui(root)
     root.mainloop()
 
