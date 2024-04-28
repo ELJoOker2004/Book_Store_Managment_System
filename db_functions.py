@@ -144,11 +144,29 @@ def add_user(username, password,name):
     cursor = conn.cursor()
 
     hashed_password = hash_password(password)
-
-    cursor.execute("INSERT INTO users (username, password, name) VALUES (?, ?, ?)", (username, hashed_password, name))
+    role = "user"
+    cursor.execute("INSERT INTO users (username, password, name,role) VALUES (?, ?, ?,?)", (username, hashed_password, name,role))
 
     conn.commit()
     conn.close()
+
+def isAdmin(username):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    admin ="admin"
+    try:
+        cursor.execute("SELECT * FROM users WHERE username = ? AND role = ?", (username, admin))
+        user = cursor.fetchone()
+        conn.close()
+        if user:
+            return True
+        else:
+            return False
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 
 def add_book(name, cover, quantity):
     conn = sqlite3.connect('book_store.db')

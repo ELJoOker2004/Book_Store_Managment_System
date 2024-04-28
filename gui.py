@@ -72,6 +72,9 @@ class gui():
         entered_password = self.password_entry.get()
 
         if db.authenticateUser(entered_username, entered_password):
+            if db.isAdmin(entered_username):
+                self.admin(entered_username)
+                return 0
             self.profile(entered_username)
         else:
             self.invalid.config(text="Invalid username or password")
@@ -110,8 +113,6 @@ class gui():
         self.loginWindow.bind("<Return>", lambda event: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
         self.duplicate = tkk.Label(self.frame, text="", foreground="red")
         self.duplicate.grid(row=5, column=1, columnspan=2, pady=5, padx=5)
-
-
 
     def check_username(self, username, password, name):
         username = username.get().strip()
@@ -164,18 +165,75 @@ class gui():
             book_label = tk.Label(self.loginWindow, text=book_name, font=("Comic Sans MS", 15), fg="black",
                                   wraplength=100)
             book_label.place(x=200 + col * 170 * 2,
-                             y=230 + row * 160)  # Adjust the x and y coordinates based on the row and column
+                             y=230 + row * 210)  # Adjust the x and y coordinates based on the row and column
 
             # Open, resize, and display the book cover
             img = Image.open(book_cover)
-            img = img.resize((150, 150))  # Resize the image
+            img = img.resize((150, 200))  # Resize the image
             img = ImageTk.PhotoImage(img)
             img_label = tk.Label(self.loginWindow, image=img)
             img_label.image = img  # Keep a reference to the image
             img_label.place(x=10 + col * 170 * 2,
-                            y=180 + row * 160)  # Adjust the x and y coordinates based on the row and column
+                            y=180 + row * 210)  # Adjust the x and y coordinates based on the row and column
 
             # Create a label to display the book quantity
             # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
             # quantity_label.place(x=280, y=85 + i * 60)
 
+    def admin(self,username):
+        self.app.destroy()
+        self.frame.destroy()
+        self.username_entry.destroy()
+        self.username_label.destroy()
+        self.password_entry.destroy()
+        self.password_label.destroy()
+        self.login_button.destroy()
+        self.invalid.destroy()
+
+        self.img = Image.open("download.jpeg")
+        # Resize the image
+        self.img = self.img.resize((100, 100))
+        self.img = ImageTk.PhotoImage(self.img)
+        # Create a label and add the image to it
+        imglabel = tkk.Label(self.loginWindow, image=self.img)
+        imglabel.grid(row=0, column=0, sticky='nw')
+
+        userlist = db.searchByUsername(username)
+
+        # Create a label to display the name
+        namelocation = tkk.Label(self.loginWindow, text="admin:", font=("Comic Sans MS", 20), foreground="brown")
+        namelocation.place(x=120, y=5)
+        namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
+        namelabel.place(x=130, y=45)
+
+        ownedbookslabel = tkk.Label(self.loginWindow, text="Owned Books", font=("Comic Sans MS", 20),
+                                    foreground="black", background="cyan")
+        ownedbookslabel.place(relx=0.5, rely=0.16, anchor='center')
+
+        booklist = db.get_books()  # This should return a list of tuples with book info
+
+        for i, book in enumerate(booklist):
+            book_name, book_cover, book_quantity = book
+
+            # Calculate the row and column based on the index
+            row = i // 2  # Integer division gives the row number
+            col = i % 2  # Remainder gives the column number
+
+            # Create a label to display the book name
+            book_label = tk.Label(self.loginWindow, text=book_name, font=("Comic Sans MS", 15), fg="black",
+                                  wraplength=100)
+            book_label.place(x=200 + col * 170 * 2,
+                             y=230 + row * 210)  # Adjust the x and y coordinates based on the row and column
+
+            # Open, resize, and display the book cover
+            img = Image.open(book_cover)
+            img = img.resize((150, 200))  # Resize the image
+            img = ImageTk.PhotoImage(img)
+            img_label = tk.Label(self.loginWindow, image=img)
+            img_label.image = img  # Keep a reference to the image
+            img_label.place(x=10 + col * 170 * 2,
+                            y=180 + row * 210)  # Adjust the x and y coordinates based on the row and column
+
+            # Create a label to display the book quantity
+            # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
+            # quantity_label.place(x=280, y=85 + i * 60)
