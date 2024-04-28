@@ -7,21 +7,21 @@ import db_functions as db
 
 
 class Application(tk.Frame):
-    def __init__(self, image,master=None):
+    def __init__(self, image,frames,speed,master=None):
         super().__init__(master)
         self.pack()
-        self.create_widgets(image)
+        self.create_widgets(image,frames,speed)
 
-    def create_widgets(self, image):
+    def create_widgets(self, image,frames,speed):
         self.gif = tkk.PhotoImage(file=image)
         self.label = tkk.Label(self, image=self.gif)
         self.label.pack()
-        self.update_gif(0)
+        self.update_gif(0,frames,speed)
 
-    def update_gif(self, frame):
+    def update_gif(self, frame,frames,speed):
 
-        self.gif.configure(format="gif -index %i" % (frame % 25))
-        self.after(50, self.update_gif, frame+1)
+        self.gif.configure(format="gif -index %i" % (frame % frames))
+        self.after(speed, self.update_gif, frame+1,frames,speed)
 
 
 class gui():
@@ -53,7 +53,7 @@ class gui():
         self.loginWindow.title('Profile')
         self.loginWindow.resizable(False, False)
 
-        self.app = Application("topbar.gif",master=self.loginWindow)
+        self.app = Application("topbar.gif",25,50,master=self.loginWindow)
         self.app.pack()
 
         # Then create a frame for the labels and entries
@@ -70,11 +70,11 @@ class gui():
         self.password_entry = tkk.Entry(self.frame)
         self.password_entry.grid(row=1, column=1, padx=5, pady=5)
 
-        self.login_button = tkk.Button(self.frame, text="Login", command=self.authenticate)
+        self.login_button = tkk.Button(self.frame, text="Login", command=self.authenticate,bootstyle="dark")
         self.login_button.grid(row=3, column=0, columnspan=2, pady=0)
         self.loginWindow.bind("<Return>", lambda event: self.authenticate())
 
-        self.createuser = tkk.Button(self.frame, text="Create new user")
+        self.createuser = tkk.Button(self.frame, text="Create new user",bootstyle="dark-link")
         self.createuser.grid(row=4, column=0, columnspan=2, pady=5)
         self.createuser.bind("<Button-1>", lambda event: self.create_account())
 
@@ -108,7 +108,7 @@ class gui():
         self.invalid.destroy()
         self.createuser.destroy()
 
-        self.app = Application("topbar.gif", master=self.loginWindow)
+        self.app = Application("welcome-anime.gif",22,90, master=self.loginWindow)
         self.app.pack()
 
         self.frame = tkk.Frame(self.loginWindow)
@@ -128,14 +128,14 @@ class gui():
         self.password_label.grid(row=2, column=0, padx=5, pady=5)
         self.password_entry = tkk.Entry(self.frame)
         self.password_entry.grid(row=2, column=1, padx=5, pady=5)
-        self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry), width=7)
+        self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry), width=7, bootstyle="success")
         self.signup_button.grid(row=3, column=0, columnspan=1,padx= 5, pady=10)
         self.loginWindow.bind("<Return>", lambda event: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
         self.duplicate = tkk.Label(self.frame, text="", foreground="red")
         self.duplicate.grid(row=4, column=0, columnspan=3, pady=5)
         self.success = tkk.Label(self.frame, text="", foreground="green")
         self.success.grid(row=5, columnspan=2, pady=5, column=0)
-        self.tologin_button = tkk.Button(self.frame, text="Login", command=lambda: self.login_Window(), width=7)
+        self.tologin_button = tkk.Button(self.frame, text="Login", command=lambda: self.login_Window(), width=7,bootstyle="dark")
         self.tologin_button.grid(row=3, column=1, columnspan=1,padx= 5, pady=10,)
 
     def check_username(self, username, password, name):
