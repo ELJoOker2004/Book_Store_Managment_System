@@ -180,7 +180,21 @@ def add_book(name, cover, quantity):
 def get_books():
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("SELECT name, cover, quantity FROM books")
+    c.execute("SELECT id,name, cover, quantity FROM books")
     books = c.fetchall()
     conn.close()
     return books
+
+def increase_book(book_id):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("UPDATE books SET quantity = quantity + 1 WHERE id = ?", (book_id,))
+    conn.commit()
+    conn.close()
+
+def decrease_book(book_id):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
+    conn.commit()
+    conn.close()

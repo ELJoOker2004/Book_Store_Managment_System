@@ -6,6 +6,7 @@ import db_functions as db
 # from tkinter import ttk
 import mainWindow as mw
 import webbrowser
+from tkinter import Canvas, Scrollbar , Frame
 
 class Application(tk.Frame):
     def __init__(self, image,frames,speed,master=None):
@@ -221,6 +222,7 @@ class Gui():
             # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
             # quantity_label.place(x=280, y=85 + i * 60)
 
+
     def admin(self,username):
         self.app.destroy()
         self.frame.destroy()
@@ -230,6 +232,8 @@ class Gui():
         self.password_label.destroy()
         self.login_button.destroy()
         self.invalid.destroy()
+        self.createuser.destroy()
+
         self.loginWindow.title('Admin Page')
         self.img = Image.open("download.jpeg")
         # Resize the image
@@ -237,47 +241,83 @@ class Gui():
         self.img = ImageTk.PhotoImage(self.img)
         # Create a label and add the image to it
         imglabel = tkk.Label(self.loginWindow, image=self.img)
-        imglabel.grid(row=0, column=0, sticky='nw')
+        imglabel.pack(anchor='nw')
 
         userlist = db.searchByUsername(username)
 
         # Create a label to display the name
-        namelocation = tkk.Label(self.loginWindow, text="admin:", font=("Comic Sans MS", 20), foreground="brown")
+        namelocation = tkk.Label(self.loginWindow, text="Admin:", font=("Comic Sans MS", 20), foreground="brown")
         namelocation.place(x=120, y=5)
         namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
         namelabel.place(x=130, y=45)
 
-        ownedbookslabel = tkk.Label(self.loginWindow, text="Owned Books", font=("Comic Sans MS", 20),
-                                    foreground="black", background="cyan")
-        ownedbookslabel.place(relx=0.5, rely=0.16, anchor='center')
+        frame2 = Frame(self.loginWindow)
+        frame2.pack(pady=20)
+        # Create a new frame
+        frame = Frame(self.loginWindow)
+        frame.pack(fill='both', expand=True)  # Adjust the fill and expand options
+
+        # Create a canvas and a vertical scrollbar
+        canvas = Canvas(frame)
+        scrollbar = Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas)
+
+        # Configure the canvas to be scrollable
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        # Bind the scroll wheel event to the yview_scroll method
+        canvas.bind("<MouseWheel>",
+                    lambda event: canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
+        canvas.bind("<Button-4>", lambda event: canvas.yview_scroll(int(-1), "units"))  # For Linux
+        canvas.bind("<Button-5>", lambda event: canvas.yview_scroll(int(1), "units"))  # For Linux
+
+        # Place the canvas and the scrollbar in the frame
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
 
         booklist = db.get_books()  # This should return a list of tuples with book info
 
         for i, book in enumerate(booklist):
-            book_name, book_cover, book_quantity = book
-
-            # Calculate the row and column based on the index
-            row = i // 2  # Integer division gives the row number
-            col = i % 2  # Remainder gives the column number
-
-            # Create a label to display the book name
-            book_label = tk.Label(self.loginWindow, text=book_name, font=("Comic Sans MS", 15), fg="black",
-                                  wraplength=120)
-            book_label.place(x=200 + col * 170 * 2,
-                             y=230 + row * 210)  # Adjust the x and y coordinates based on the row and column
+            book_id,book_name, book_cover, book_quantity = book
 
             # Open, resize, and display the book cover
             img = Image.open(book_cover)
             img = img.resize((150, 200))  # Resize the image
             img = ImageTk.PhotoImage(img)
-            img_label = tk.Label(self.loginWindow, image=img)
+            img_label = tk.Label(scrollable_frame, image=img)
             img_label.image = img  # Keep a reference to the image
-            img_label.place(x=10 + col * 170 * 2,
-                            y=180 + row * 210)  # Adjust the x and y coordinates based on the row and column
+            img_label.grid(row=i, column=1)
+
+            # Create a label to display the book name
+            book_label = tk.Label(scrollable_frame, text=book_name, font=("Comic Sans MS", 15), fg="black",
+                                  wraplength=100)
+            book_label.grid(row=i, column=0)
 
             # Create a label to display the book quantity
-            # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
-            # quantity_label.place(x=280, y=85 + i * 60)
+            quantity_label = tk.Label(scrollable_frame, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
+            quantity_label.grid(row=i, column=2)
+
+            # Create + and - buttons
+            plus_button = tk.Button(scrollable_frame, text="+",font=("Comic Sans MS",10), command=lambda b_id=book_id: db.increase_book(b_id))
+            minus_button = tk.Button(scrollable_frame, text="-",font=("Comic Sans MS",10), command=lambda b_id=book_id: db.decrease_book(b_id))
+            plus_button.grid(row=i, column=3,padx=1)
+            minus_button.grid(row=i, column=4,padx=1)
+
+        # Create a label, entry, and button on the right side of the page
+        right_label = tk.Label(self.loginWindow, text="Right Label", font=("Comic Sans MS", 20), fg="black")
+        right_label.pack(side="right")
+        right_entry = tk.Entry(self.loginWindow)
+        right_entry.pack(side="right")
+        right_button = tk.Button(self.loginWindow, text="Right Button", command=lambda: print("Button clicked"))
+        right_button.pack(side="right")
     def mainWindow(self,username):
         # frames
         self.loginWindow.title('Market')
