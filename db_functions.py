@@ -72,7 +72,7 @@ def authenticateUser(username, password):
     row = cursor.fetchone()
 
     if row is None:
-        print("No user found with this username.")
+        #print("No user found with this username.")
         conn.close()
         return False
     elif row[1] == hash_password(password):
