@@ -80,7 +80,19 @@ def authenticateUser(username, password):
         conn.close()
         return True
 
+def checkUserduplicates(username):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
 
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+    row = cursor.fetchone()
+
+    if row is None:
+        conn.close()
+        return True
+    else:
+        return False
 def printRowInTable(n):
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)

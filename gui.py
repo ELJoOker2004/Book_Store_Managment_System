@@ -13,8 +13,8 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.gif = tk.PhotoImage(file="topbar.gif")
-        self.label = tk.Label(self, image=self.gif)
+        self.gif = tkk.PhotoImage(file="topbar.gif")
+        self.label = tkk.Label(self, image=self.gif)
         self.label.pack()
         self.update_gif(0)
 
@@ -31,7 +31,7 @@ class gui():
 
     def login_Window(self):
 
-        self.loginWindow.geometry('400x600')
+        self.loginWindow.geometry('700x900')
         self.loginWindow.title('Profile')
         self.loginWindow.resizable(False, False)
 
@@ -56,6 +56,10 @@ class gui():
         self.login_button.grid(row=3, column=0, columnspan=2, pady=0)
         self.loginWindow.bind("<Return>", lambda event: self.authenticate())
 
+        self.createuser = tkk.Label(self.frame, text="Create new user")
+        self.createuser.grid(row=4, column=0, columnspan=2, pady=5)
+        self.createuser.bind("<Button-1>", lambda event: self.create_account())
+
         self.invalid = tkk.Label(self.frame, text="", foreground="red")
         self.invalid.grid(row=2, column=0, columnspan=2, pady=5)
 
@@ -72,8 +76,51 @@ class gui():
         else:
             self.invalid.config(text="Invalid username or password")
 
+    def create_account(self):
+        self.app.destroy()
+        self.frame.destroy()
+        self.username_entry.destroy()
+        self.username_label.destroy()
+        self.password_entry.destroy()
+        self.password_label.destroy()
+        self.login_button.destroy()
+        self.invalid.destroy()
+        self.createuser.destroy()
 
 
+        self.frame = tkk.Frame(self.loginWindow)
+        self.frame.pack(expand=True)
+
+        self.newname_label = tkk.Label(self.frame, text="Full name:")
+        self.newname_label.grid(row=0, column=0, padx=5, pady=5)
+        self.newname_entry = tkk.Entry(self.frame)
+        self.newname_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        self.username_label = tkk.Label(self.frame, text="Username:")
+        self.username_label.grid(row=1, column=0, padx=5, pady=5)
+        self.username_entry = tkk.Entry(self.frame)
+        self.username_entry.grid(row=1, column=1, padx=5, pady=5)
+
+        self.password_label = tkk.Label(self.frame, text="Password:")
+        self.password_label.grid(row=2, column=0, padx=5, pady=5)
+        self.password_entry = tkk.Entry(self.frame)
+        self.password_entry.grid(row=2, column=1, padx=5, pady=5)
+        self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
+        self.signup_button.grid(row=3, column=0, columnspan=2, pady=0)
+        self.loginWindow.bind("<Return>", lambda event: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
+        self.duplicate = tkk.Label(self.frame, text="", foreground="red")
+        self.duplicate.grid(row=5, column=1, columnspan=2, pady=5, padx=5)
+
+
+
+    def check_username(self, username, password, name):
+        username = username.get().strip()
+        password = password.get().strip()
+        name = name.get().strip()
+        if (db.checkUserduplicates(username)):
+            db.add_user(username, password, name)
+        else:
+            self.duplicate.config(text="Not available username")
     def profile(self,username):
         self.app.destroy()
         self.frame.destroy()
@@ -123,4 +170,3 @@ class gui():
             # Create a label to display the book quantity
             # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
             # quantity_label.place(x=280, y=85 + i * 60)
-
