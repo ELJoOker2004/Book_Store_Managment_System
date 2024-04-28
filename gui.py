@@ -7,13 +7,13 @@ import db_functions as db
 
 
 class Application(tk.Frame):
-    def __init__(self, master=None):
+    def __init__(self, image,master=None):
         super().__init__(master)
         self.pack()
-        self.create_widgets()
+        self.create_widgets(image)
 
-    def create_widgets(self):
-        self.gif = tkk.PhotoImage(file="topbar.gif")
+    def create_widgets(self, image):
+        self.gif = tkk.PhotoImage(file=image)
         self.label = tkk.Label(self, image=self.gif)
         self.label.pack()
         self.update_gif(0)
@@ -53,7 +53,7 @@ class gui():
         self.loginWindow.title('Profile')
         self.loginWindow.resizable(False, False)
 
-        self.app = Application(master=self.loginWindow)
+        self.app = Application("topbar.gif",master=self.loginWindow)
         self.app.pack()
 
         # Then create a frame for the labels and entries
@@ -108,6 +108,8 @@ class gui():
         self.invalid.destroy()
         self.createuser.destroy()
 
+        self.app = Application("topbar.gif", master=self.loginWindow)
+        self.app.pack()
 
         self.frame = tkk.Frame(self.loginWindow)
         self.frame.pack(expand=True)
