@@ -68,7 +68,7 @@ class Gui():
 
         self.password_label = tkk.Label(self.frame, text="Password:")
         self.password_label.grid(row=1, column=0, padx=5, pady=5)
-        self.password_entry = tkk.Entry(self.frame)
+        self.password_entry = tkk.Entry(self.frame, show="*")
         self.password_entry.grid(row=1, column=1, padx=5, pady=5)
 
         self.login_button = tkk.Button(self.frame, text="Login", command=self.authenticate,bootstyle="dark")
@@ -137,7 +137,7 @@ class Gui():
 
         self.password_label = tkk.Label(self.frame, text="Password:")
         self.password_label.grid(row=2, column=0, padx=5, pady=5)
-        self.password_entry = tkk.Entry(self.frame)
+        self.password_entry = tkk.Entry(self.frame, show="*")
         self.password_entry.grid(row=2, column=1, padx=5, pady=5)
         self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry), width=7, bootstyle="success")
         self.signup_button.grid(row=3, column=0, columnspan=1,padx= 5, pady=10)
