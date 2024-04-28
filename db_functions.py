@@ -139,16 +139,20 @@ def login():
 
 
 def add_user(username, password,name):
+    if (username == "" or password == "" or name == ""):
+        return False
     db_path = "book_store.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     hashed_password = hash_password(password)
-    role = "user"
-    cursor.execute("INSERT INTO users (username, password, name,role) VALUES (?, ?, ?,?)", (username, hashed_password, name,role))
-
-    conn.commit()
-    conn.close()
+    try:
+        cursor.execute("INSERT INTO users (username, password, name) VALUES (?, ?, ?)", (username, hashed_password, name))
+        conn.commit()
+        conn.close()
+        return True
+    except:
+        return False
 
 def isAdmin(username):
     db_path = "book_store.db"
@@ -165,8 +169,6 @@ def isAdmin(username):
             return False
     except Exception as e:
         print(f"An error occurred: {e}")
-
-
 
 def add_book(name, cover, quantity):
     conn = sqlite3.connect('book_store.db')

@@ -29,8 +29,26 @@ class gui():
         self.loginWindow = root
         self.login_Window()
 
+    flag = False
     def login_Window(self):
 
+        if (self.flag):
+            self.app.destroy()
+            self.frame.destroy()
+            self.username_entry.destroy()
+            self.username_label.destroy()
+            self.password_entry.destroy()
+            self.password_label.destroy()
+            self.login_button.destroy()
+            self.invalid.destroy()
+            self.createuser.destroy()
+            self.newname_label.destroy()
+            self.newname_entry.destroy()
+            self.duplicate.destroy()
+            self.signup_button.destroy()
+            self.success.destroy()
+            self.tologin_button.destroy()
+        self.flag=True
         self.loginWindow.geometry('700x900')
         self.loginWindow.title('Profile')
         self.loginWindow.resizable(False, False)
@@ -56,7 +74,7 @@ class gui():
         self.login_button.grid(row=3, column=0, columnspan=2, pady=0)
         self.loginWindow.bind("<Return>", lambda event: self.authenticate())
 
-        self.createuser = tkk.Label(self.frame, text="Create new user")
+        self.createuser = tkk.Button(self.frame, text="Create new user")
         self.createuser.grid(row=4, column=0, columnspan=2, pady=5)
         self.createuser.bind("<Button-1>", lambda event: self.create_account())
 
@@ -108,20 +126,30 @@ class gui():
         self.password_label.grid(row=2, column=0, padx=5, pady=5)
         self.password_entry = tkk.Entry(self.frame)
         self.password_entry.grid(row=2, column=1, padx=5, pady=5)
-        self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
-        self.signup_button.grid(row=3, column=0, columnspan=2, pady=0)
+        self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry), width=7)
+        self.signup_button.grid(row=3, column=0, columnspan=1,padx= 5, pady=10)
         self.loginWindow.bind("<Return>", lambda event: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
         self.duplicate = tkk.Label(self.frame, text="", foreground="red")
-        self.duplicate.grid(row=5, column=1, columnspan=2, pady=5, padx=5)
+        self.duplicate.grid(row=4, column=0, columnspan=3, pady=5)
+        self.success = tkk.Label(self.frame, text="", foreground="green")
+        self.success.grid(row=5, columnspan=2, pady=5, column=0)
+        self.tologin_button = tkk.Button(self.frame, text="Login", command=lambda: self.login_Window(), width=7)
+        self.tologin_button.grid(row=3, column=1, columnspan=1,padx= 5, pady=10,)
 
     def check_username(self, username, password, name):
         username = username.get().strip()
         password = password.get().strip()
         name = name.get().strip()
         if (db.checkUserduplicates(username)):
-            db.add_user(username, password, name)
+            if(db.add_user(username, password, name)):
+                self.newname_entry.delete(0, tkk.END)
+                self.username_entry.delete(0, tkk.END)
+                self.password_entry.delete(0, tkk.END)
+                self.success.config(text="User Has Been Created Successfully")
+            else:
+                self.duplicate.config(text="You Have To Fulfill All The Fields")
         else:
-            self.duplicate.config(text="Not available username")
+            self.duplicate.config(text="Not Available Username")
     def profile(self,username):
         self.app.destroy()
         self.frame.destroy()
