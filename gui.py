@@ -415,12 +415,12 @@ class Gui():
         header.pack()
 
         #first 6 books in 2 coulumns
-        book_detail = [("D:\python\images\\to kill a mocking bird.png","To Kill a Mocking Bird", "Harper Lee"),
-                       ("D:\python\images\inheritance games.jpeg", "The Inheritance Games", "Jennifer Lynn Barnes"), 
-                       ("D:\python\images\great expdition.jpeg", "The Great Expedtiton","Charles Dickens"),
-                       ("D:\python\images\cant touch me.jpeg", "Cant't Touch Me ", "David Goggins"),
-                       ("D:\python\images\\book thief.jpeg", "The Book Thief", "Markus Zusak"),
-                       ("D:\python\images\\48 laws of power.jpg","48 Laws of Power", "Robert Greene")
+        book_detail = [("images\\to kill a mocking bird.png","To Kill a Mocking Bird", "Harper Lee"),
+                       ("images\\inheritance games.jpeg", "The Inheritance Games", "Jennifer Lynn Barnes"), 
+                       ("images\\great expdition.jpeg", "The Great Expedtiton","Charles Dickens"),
+                       ("images\\cant touch me.jpeg", "Cant't Touch Me ", "David Goggins"),
+                       ("images\\book thief.jpeg", "The Book Thief", "Markus Zusak"),
+                       ("images\\48 laws of power.jpg","48 Laws of Power", "Robert Greene")
                        
                        ]
         
@@ -461,12 +461,12 @@ class Gui():
                       
         #second 3 books in 1 coulumn
         book_detail = [
-            ("D:\python\images\\art of war.png","The art of War", "Sun Tzu"),
-            ("D:\python\images\pride and pejudice.jpeg", "Pride and Prejudice", "Jane Austen"),
-            ("D:\python\images\\the hobbit.jpeg", "The Hobbit", "J.J.R. Tolkien"),
-            ("D:\python\images\moby dick.jpeg", "Moby Dick ", "Herman Melvilla"),
-            ("D:\python\images\\rich dad poor dad.jpeg", "Ruch Dad Poor Dad", "Robert T. Kiyosaki"),
-            ("D:\python\images\lord of the rings.jpeg","Lord if the Rings", "J.J.R. Tolkien")
+            ("images\\art of war.png","The art of War", "Sun Tzu"),
+            ("images\\pride and pejudice.jpeg", "Pride and Prejudice", "Jane Austen"),
+            ("images\\the hobbit.jpeg", "The Hobbit", "J.J.R. Tolkien"),
+            ("images\\moby dick.jpeg", "Moby Dick ", "Herman Melvilla"),
+            ("images\\rich dad poor dad.jpeg", "Ruch Dad Poor Dad", "Robert T. Kiyosaki"),
+            ("images\\lord of the rings.jpeg","Lord if the Rings", "J.J.R. Tolkien")
         ]
         for i, book in enumerate(book_detail):
             
