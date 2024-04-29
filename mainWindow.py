@@ -197,16 +197,16 @@ class Main(object):
                             y=70 + row * 210)  # Adjust the x and y coordinates based on the row and column
 
             
-def main():
+# def main():
 
-    win = tk.Tk()
-    win.geometry("1300x750+350+200")
-    win.title("Main Window")
-    app = Main(win)
+#     win = tk.Tk()
+#     win.geometry("1300x750+350+200")
+#     win.title("Main Window")
+#     app = Main(win)
 
-    win.mainloop()
+#     win.mainloop()
 
-main()
+# main()
 
 #-------------------------------------------
 
