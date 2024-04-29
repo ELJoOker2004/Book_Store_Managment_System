@@ -97,7 +97,7 @@ class Main(object):
 
             # Change cursor when hovering over the label
             label.bind("<Enter>", lambda event:label.config(cursor="hand2"))
-            label.bind("<Leave>",label.config(cursor="arrow"))
+            label.bind("<Leave>",label.config(cursor="hand2"))
 
         leftpanel = tk.Label(centerLeftFrame, bg = "grey",width = 10, height=700)  
         leftpanel.pack()  
