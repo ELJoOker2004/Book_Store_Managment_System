@@ -50,7 +50,7 @@ class Gui():
             self.signup_button.destroy()
             self.success.destroy()
             self.tologin_button.destroy()
-        self.flag=True
+        self.flag = True
         self.loginWindow.geometry('700x900')
         self.loginWindow.title('Login')
         self.loginWindow.resizable(False, False)
@@ -194,7 +194,7 @@ class Gui():
                                     foreground="black", background="cyan")
         ownedbookslabel.place(relx=0.5, rely=0.16, anchor='center')
 
-        booklist = db.get_books()  # This should return a list of tuples with book info
+        booklist = db.get_user_books(username)  # This should return a list of tuples with book info
 
         for i, book in enumerate(booklist):
             book_name, book_cover, book_quantity = book

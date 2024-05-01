@@ -185,6 +185,19 @@ def get_books():
     conn.close()
     return books
 
+def get_user_books(username):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT book_id FROM purchases WHERE buyer_username = ?", (username,))
+    books_ids = c.fetchall()
+    user_books = []
+    for book_id in books_ids:
+        c.execute("SELECT name, cover, quantity FROM books WHERE id = ?", (book_id[0],))
+        book = c.fetchone()
+        user_books.append(book)
+    conn.close()
+    return user_books
+
 def increase_book(book_id):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
