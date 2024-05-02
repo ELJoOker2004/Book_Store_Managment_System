@@ -34,7 +34,7 @@ class MainWindow(tk.Frame):
         topframe.pack(side="top")
 
         header = tk.Label(topframe, text="WELCOME BACK", fg="black")
-        header.config(font=("Times New Roman", 48))
+        header.config(font=("Times New Roman", 40))
         header.pack()
 
         # ----------------------------------------------
@@ -76,6 +76,7 @@ class MainWindow(tk.Frame):
             # book name
             bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
             bookName.grid(row=i,column=100, pady=10)
+
             # hyperlinks of books names
             bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
             bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
@@ -84,6 +85,11 @@ class MainWindow(tk.Frame):
             # author name
             bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10),anchor="sw" )
             bookAuthor.grid(row=i+10, column=100)
+
+            #add to cart
+            #add to cart
+            cart = tk.Button(txt, text = "add to cart", width=12, height=1, command=open_link_1)
+            cart.grid(row=i+20, column=100)
             
             i += 150
 
@@ -106,6 +112,7 @@ class MainWindow(tk.Frame):
             # book name
             bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
             bookName.grid(row=i,column=100+j, pady=10)
+
             # hyperlinks of books names
             bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
             bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
@@ -114,12 +121,17 @@ class MainWindow(tk.Frame):
             # author name
             bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10),anchor="sw" )
             bookAuthor.grid(row=i+10, column=100+j)
+
+            #add to cart
+            cart = tk.Button(txt, text = "add to cart", width=12, height=1, command=open_link_1)
+            cart.grid(row=i+20, column=100+j)
             
             i += 150
         
         # Update the canvas scroll region
         self.image_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
+        
         # -------------------------------------------------------------------
         # search bar
         searchbar = tk.Frame(topframe, width=1200, height=100)
@@ -158,6 +170,16 @@ class MainWindow(tk.Frame):
         # Perform search operation here
         self.ent_search.insert(0, "Search here")
         self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
+
+        #profile button
+        profile_button = tk.Button(self, text="Profile", command=open_link_1, width=9, height=1, bg="green")
+        profile_button.place(x=2,y=25)
+
+        #sign out button
+        sign_out_button = tk.Button(self, text="sign out", command=open_link_1, width=9, height=1, bg="#ffffff")
+        sign_out_button.place(x=620,y=25)
+
+
 class Gui():
     def __init__(self, root):
         self.loginWindow = root
