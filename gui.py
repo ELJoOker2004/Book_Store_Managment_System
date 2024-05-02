@@ -59,65 +59,67 @@ class MainWindow(tk.Frame):
         i = 0
         j = 150
 
-        for image_path, book_name, book_author in image_paths:
+        for image_path, book_name, book_author  in image_paths[:12]:
+            
             name, author = book_name, book_author
 
             img = Image.open(image_path)
-            img = img.resize((170, 230))
+            img = img.resize((130, 200))
             tk_img = ImageTk.PhotoImage(img)
             self.images.append(tk_img)
             label = tk.Label(self.image_frame, image=tk_img)
-            label.grid(row=i, column=0, pady=10)
-
+            label.grid(row = i, column = 0, pady=10)
+            
             txt = tk.Frame(self.image_frame)
-            txt.grid(row=i, column=100, padx=10)
-
+            txt.grid(row=i, column=100,padx=10)
+            
             # book name
-            bookName = tk.Label(txt, text=name, font=("Times New Roman", 15))
-            bookName.grid(row=i, column=100, pady=10)
+            bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
+            bookName.grid(row=i,column=100, pady=10)
             # hyperlinks of books names
             bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
             bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
             bookName.bind("<Leave>", lambda event: bookName.config(cursor="arrow", fg="black"))
 
             # author name
-            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 13), anchor="sw")
-            bookAuthor.grid(row=i + 10, column=100)
-
+            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10),anchor="sw" )
+            bookAuthor.grid(row=i+10, column=100)
+            
             i += 150
 
+        # second column for books
         i = 0
-        for image_path, book_name, book_author in image_paths:
+        for image_path, book_name, book_author  in image_paths[12:]:
+            
             name, author = book_name, book_author
 
             img = Image.open(image_path)
-            img = img.resize((170, 230))
+            img = img.resize((130, 200))
             tk_img = ImageTk.PhotoImage(img)
             self.images.append(tk_img)
             label = tk.Label(self.image_frame, image=tk_img)
-            label.grid(row=i, column=j, pady=10)
-
+            label.grid(row = i, column = j, pady=10)
+            
             txt = tk.Frame(self.image_frame)
-            txt.grid(row=i, column=100 + j, padx=10)
-
+            txt.grid(row=i, column=100+j,padx=10)
+            
             # book name
-            bookName = tk.Label(txt, text=name, font=("Times New Roman", 15))
-            bookName.grid(row=i, column=100 + j, pady=10)
+            bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
+            bookName.grid(row=i,column=100+j, pady=10)
             # hyperlinks of books names
             bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
             bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
             bookName.bind("<Leave>", lambda event: bookName.config(cursor="arrow", fg="black"))
 
             # author name
-            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 13), anchor="sw")
-            bookAuthor.grid(row=i + 10, column=100 + j)
-
+            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10),anchor="sw" )
+            bookAuthor.grid(row=i+10, column=100+j)
+            
             i += 150
-
+        
         # Update the canvas scroll region
         self.image_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
-
         # -------------------------------------------------------------------
         # search bar
         searchbar = tk.Frame(topframe, width=1200, height=100)
@@ -447,22 +449,34 @@ class Gui():
         right_entry.pack(side="right")
         right_button = tk.Button(self.loginWindow, text="Right Button", command=lambda: print("Button clicked"))
         right_button.pack(side="right")
+
     def mainWindow(self,username):
         # List of image paths
         image_paths = [
-            ("images\\to kill a mocking bird.png", "To Kill a Mocking Bird", "Harper Lee"),
-            ("images\\inheritance games.jpeg", "The Inheritance Games", "Jennifer Lynn Barnes"),
-            ("images\\great expdition.jpeg", "The Great Expedtiton", "Charles Dickens"),
-            ("images\\cant touch me.jpeg", "Cant't Touch Me ", "David Goggins"),
-            ("images\\book thief.jpeg", "The Book Thief", "Markus Zusak"),
-            ("images\\48 laws of power.jpg", "48 Laws of Power", "Robert Greene"),
-            ("images\\art of war.png", "The art of War", "Sun Tzu"),
-            ("images\\pride and pejudice.jpeg", "Pride and Prejudice", "Jane Austen"),
-            ("images\\the hobbit.jpeg", "The Hobbit", "J.J.R. Tolkien"),
-            ("images\\moby dick.jpeg", "Moby Dick ", "Herman Melvilla"),
-            ("images\\rich dad poor dad.jpeg", "Ruch Dad Poor Dad", "Robert T. Kiyosaki"),
-            ("images\\lord of the rings.jpeg", "Lord if the Rings", "J.J.R. Tolkien")
-
+            ("D:\python\images\\to kill a mocking bird.png","To Kill a Mocking Bird", "Harper Lee"),
+            ("D:\python\images\inheritance games.jpeg", "The Inheritance Games", "Jennifer Lynn Barnes"), 
+            ("D:\python\images\great expdition.jpeg", "The Great Expedtiton","Charles Dickens"),
+            ("D:\python\images\cant touch me.jpeg", "Cant't Touch Me ", "David Goggins"),
+            ("D:\python\images\\book thief.jpeg", "The Book Thief", "Markus Zusak"),
+            ("D:\python\images\\48 laws of power.jpg","48 Laws of Power", "Robert Greene"),
+            ("D:\python\images\\art of war.png","The art of War", "Sun Tzu"),
+            ("D:\python\images\pride and pejudice.jpeg", "Pride and Prejudice", "Jane Austen"),
+            ("D:\python\images\\the hobbit.jpeg", "The Hobbit", "J.J.R. Tolkien"),
+            ("D:\python\images\moby dick.jpeg", "Moby Dick ", "Herman Melvilla"),
+            ("D:\python\images\\rich dad poor dad.jpeg", "Ruch Dad Poor Dad", "Robert T. Kiyosaki"),
+            ("D:\python\images\lord of the rings.jpeg","Lord if the Rings", "J.J.R. Tolkien"),
+            ("D:\\python\\images\\Angels-demons.jpeg", "Angels and Demons", "Dan Brown"),
+            ("D:\\python\\images\\alchemist.jpeg", "The Alchemist", "Paulo Coelho"),
+            ("D:\\python\\images\\life of pi.jpeg", " Th Life of Pi", "Yann Martel"),
+            ("D:\\python\\images\\martian.jpeg", "The Martian", "Andy Weir"),
+            ("D:\\python\\images\\takle of 2 cities.jpeg", "The Take of Two Cities", "Charles Dickens"),
+            ("D:\\python\\images\\girl on the train.jpeg","The Girl on the Train", "Pawla Hawkins"),
+            ("D:\\python\\images\\davinci code.jpeg", "The Da-vinci Code", "Dan Brown"),
+            ("D:\\python\\images\\the nightingale.jpeg", "The Nightingale", "Kristin Hannah"),
+            ("D:\\python\\images\\hunger games.jpeg", "The Hunger Games", "Suzanne Collins"),
+            ("D:\\python\\images\\wimpy kid.jpeg","Diary of a Wimpy Kid", "Jeff Kinney"),
+            ("D:\\python\\images\\musketeers.jpeg", "The Three Musketeers", "Alexandre Dumas"),
+            ("D:\\python\\images\\kite rinner.jpeg", "The Kite Runner", "Khaled Hosseni")
         ]
         # Create the scrollable image frame
         scrollable_frame = MainWindow(self.loginWindow, image_paths)
