@@ -852,6 +852,7 @@ class Gui():
         self.canvas.pack(side="left", fill="both", expand=True, pady=20)
 
         img2 = Image.open(book)
+        
         img2 = img2.resize((250,500))
         tk_img2 = ImageTk.PhotoImage(img2)
         photo = tk.Label(self.canvas, image=tk_img2)
