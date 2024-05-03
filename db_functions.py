@@ -288,3 +288,13 @@ def change_role(role, username):
 
     conn.commit()  # Commit the changes
     conn.close()
+def check_item_quantity(item):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    id = item[1]
+    c.execute("SELECT quantity FROM books WHERE id = ?", (id,))
+    quantity = c.fetchone()
+    conn.close()
+    if (quantity[0] == 0):
+        return False
+    return True

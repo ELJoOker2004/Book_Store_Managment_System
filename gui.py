@@ -278,6 +278,110 @@ class Gui():
             self.scrollable_frame.destroy()
         except Exception as e:
             pass
+        try:
+            self.topframe.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.canvas.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollable_frame.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.header.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.searchbar.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.image_frame.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.bookName.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.bookAuthor.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.ent_search.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.lbl_search.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.search_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.signout_img.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.signup_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.signout_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartbutton.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.header.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.sign_out_img.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.sign_out_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.search_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.profile_img.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.profile_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.txt.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.imglabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.label.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar_h.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -390,22 +494,15 @@ class Gui():
         else:
             self.duplicate.config(text="Not Available Username")
     def profile(self,username):
-        self.app.destroy()
-        self.frame.destroy()
-        self.username_entry.destroy()
-        self.username_label.destroy()
-        self.password_entry.destroy()
-        self.password_label.destroy()
-        self.login_button.destroy()
-        self.invalid.destroy()
+        self.destruction()
         self.loginWindow.title('Profile')
         self.img = Image.open("resources/download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
         self.img = ImageTk.PhotoImage(self.img)
         # Create a label and add the image to it
-        imglabel = tkk.Label(self.loginWindow, image=self.img)
-        imglabel.grid(row=0, column=0, sticky='nw')
+        self.imglabel = tkk.Label(self.loginWindow, image=self.img)
+        self.imglabel.grid(row=0, column=0, sticky='nw')
 
         userlist = db.searchByUsername(username)
 
@@ -435,6 +532,7 @@ class Gui():
                              y=230 + row * 210)  # Adjust the x and y coordinates based on the row and column
 
             # Open, resize, and display the book cover
+            book_cover = "images\\" + book_cover
             img = Image.open(book_cover)
             img = img.resize((150, 200))  # Resize the image
             img = ImageTk.PhotoImage(img)
@@ -513,30 +611,30 @@ class Gui():
         self.frame.pack(fill='both', expand=True)  # Adjust the fill and expand options
 
         # Create a canvas and a vertical scrollbar
-        canvas = Canvas(self.frame)
-        scrollbar = Scrollbar(self.frame, orient="vertical", command=canvas.yview)
-        self.scrollable_frame = tk.Frame(canvas)
+        self.canvas = Canvas(self.frame)
+        self.scrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = tk.Frame(self.canvas)
 
         # Configure the canvas to be scrollable
         self.scrollable_frame.bind(
             "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
             )
         )
 
-        canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
         # Bind the scroll wheel event to the yview_scroll method
-        canvas.bind("<MouseWheel>",
-                    lambda event: canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
-        canvas.bind("<Button-4>", lambda event: canvas.yview_scroll(int(-1), "units"))  # For Linux
-        canvas.bind("<Button-5>", lambda event: canvas.yview_scroll(int(1), "units"))  # For Linux
+        self.canvas.bind("<MouseWheel>",
+                    lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
+        self.canvas.bind("<Button-4>", lambda event: self.canvas.yview_scroll(int(-1), "units"))  # For Linux
+        self.canvas.bind("<Button-5>", lambda event: self.canvas.yview_scroll(int(1), "units"))  # For Linux
 
         # Place the canvas and the scrollbar in the frame
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
 
         booklist = db.get_books()  # This should return a list of tuples with book info
 
@@ -599,12 +697,12 @@ class Gui():
         #scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
         #scrollable_frame.pack(fill="both", expand=True)
         # Header frame and text
-        topframe = tk.Frame(self.loginWindow)
-        topframe.pack(side="top")
+        self.topframe = tk.Frame(self.loginWindow)
+        self.topframe.pack(side="top")
 
-        header = tk.Label(topframe, text="WELCOME BACK", fg="black")
-        header.config(font=("Times New Roman", 40))
-        header.pack()
+        self.header = tk.Label(self.topframe, text="WELCOME BACK", fg="black")
+        self.header.config(font=("Times New Roman", 40))
+        self.header.pack()
 
         # ----------------------------------------------
         #sdlkjghdfg;ldkjsfhg 
@@ -630,7 +728,7 @@ class Gui():
         self.images = []
         i = 0
         j = 0  # For two columns, initialize j as 0
-
+        self.added_labels = {}
         for image_path, book_name, book_author, id in image_paths:
             name, author = book_name, book_author
 
@@ -638,24 +736,29 @@ class Gui():
             img = img.resize((130, 200))
             tk_img = ImageTk.PhotoImage(img)
             self.images.append(tk_img)
-            label = tk.Label(self.image_frame, image=tk_img)
-            label.grid(row=i, column=j, pady=10)
+            self.label = tk.Label(self.image_frame, image=tk_img)
+            self.label.grid(row=i, column=j, pady=10)
 
-            txt = tk.Frame(self.image_frame)
-            txt.grid(row=i, column=j + 1, padx=10)  # Adjust column for author, buttons, etc.
-
+            self.txt = tk.Frame(self.image_frame)
+            self.txt.grid(row=i, column=j + 1, padx=63)
             # book name
-            bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
-            bookName.grid(row=0, column=0, pady=10)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11),wraplength=140)
+            self.bookName.grid(row=0, column=0, pady=10)
 
             # author name
-            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
-            bookAuthor.grid(row=1, column=0)
+            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
+            self.bookAuthor.grid(row=1, column=0)
 
             # add to cart
-            cart = tk.Button(txt, text="add to cart", width=12, height=1,
-                             command=lambda b_id=id: [self.add_to_cart(username, b_id),print(b_id)])
-            cart.grid(row=2, column=0)
+            # add to cart
+            self.cartbutton = tk.Button(self.txt, text="add to cart", width=12, height=1,
+                                        command=lambda b_id=id: [self.add_to_cart(username, b_id)])
+            self.cartbutton.grid(row=2, column=0)
+
+            # Create a label for each book and store it in the dictionary
+            self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 10), wraplength=140)
+            self.added_labels[id].grid(row=3, column=0, pady=5)
+
 
             i += 1
             if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
@@ -668,11 +771,11 @@ class Gui():
 
         # -------------------------------------------------------------------
         # search bar
-        searchbar = tk.Frame(topframe, width=1200, height=100)
-        searchbar.pack(side="bottom", fill="both")
-        self.lbl_search = tk.Label(searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
+        self.searchbar = tk.Frame(self.topframe, width=1200, height=100)
+        self.searchbar.pack(side="bottom", fill="both")
+        self.lbl_search = tk.Label(self.searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
         self.lbl_search.grid(row=0, column=0)
-        self.ent_search = tk.Entry(searchbar, width=90)
+        self.ent_search = tk.Entry(self.searchbar, width=90)
 
         def on_entry_click(event):
             """Function to handle when the user clicks inside the entry."""
@@ -698,30 +801,34 @@ class Gui():
         self.ent_search.bind("<FocusOut>", on_focus_out)
 
         # search button
-        search_button = tk.Button(searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
-        search_button.grid(row=0, column=0, padx=10, pady=5)
+        self.search_button = tk.Button(self.searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
+        self.search_button.grid(row=0, column=0, padx=10, pady=5)
 
         # Perform search operation here
         self.ent_search.insert(0, "Search here")
         self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
-        profile_img = Image.open("resources/profile.png")
-        profile_img = profile_img.resize((40, 40))
-        self.profile_img = ImageTk.PhotoImage(profile_img)  # Store the image object in an instance variable
-        profile_button = tkk.Button(self.loginWindow, command=open_link_1,bootstyle="link", image=self.profile_img)
-        profile_button.place(x=0, y=0)
+        self.profile_img = Image.open("resources/profile.png")
+        self.profile_img = self.profile_img.resize((40, 40))
+        self.profile_img = ImageTk.PhotoImage(self.profile_img)  # Store the image object in an instance variable
+        self.profile_button = tkk.Button(self.loginWindow, command=lambda  : self.profile(username),bootstyle="link", image=self.profile_img)
+        self.profile_button.place(x=0, y=0)
 
         # sign out button
-        sign_out_img = Image.open("resources/leaving.png")
-        sign_out_img = sign_out_img.resize((50, 50))
-        self.sign_out_img = ImageTk.PhotoImage(sign_out_img)
-        sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
-        sign_out_button.place(x=740, y=0)
+        self.sign_out_img = Image.open("resources/leaving.png")
+        self.sign_out_img = self.sign_out_img.resize((50, 50))
+        self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
+        self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
+        self.sign_out_button.place(x=740, y=0)
 
-    def add_to_cart(self,user_name, id):
+    def add_to_cart(self, user_name, id):
         item = [user_name, id]
-        self.cart.append(item)
-        print(self.cart)
+        item_check = db.check_item_quantity(item)
+        if item_check:
+            self.cart.append(item)
+            self.added_labels[id].config(text="Added Successfully", fg="green")
+        else:
+            self.added_labels[id].config(text="Out Of Stock", fg="red")
 
 
