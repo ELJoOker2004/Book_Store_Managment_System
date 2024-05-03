@@ -305,3 +305,10 @@ def get_books_by_id(cartids):
         books.append(book)
     conn.close()
     return books
+def get_book_descreption(id):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT descreption FROM books WHERE id = ?", (id,))
+    book = c.fetchone()
+    conn.close()
+    return book

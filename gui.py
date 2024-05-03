@@ -843,7 +843,7 @@ class Gui():
             self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11), wraplength=140)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
-            self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path: self.bookInfo(b_cover,name,author): command())
+            self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
             self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
 
@@ -854,7 +854,7 @@ class Gui():
             # add to cart
             # add to cart
             self.cartbutton = tk.Button(self.txt, text="add to cart", width=12, height=1,
-                                        command=lambda b_id=id: [self.add_to_cart(username, b_id)])
+                                        command=lambda b_id=id: [self.add_to_cart(username, b_id, "mainwindow")])
             self.cartbutton.grid(row=2, column=0)
 
             # Create a label for each book and store it in the dictionary
@@ -934,16 +934,24 @@ class Gui():
         self.sign_out_button.place(x=740, y=0)
         self.db_quantities = db.check_item_quantity()
         self.db_quantities = dict(self.db_quantities)
-    def add_to_cart(self, user_name, id):
+    def add_to_cart(self, user_name, id, place):
         item = [user_name, id]
         if (self.db_quantities[id] > 0):
             self.db_quantities[id] -= 1
             self.cart.append(item)
-            self.added_labels[id].config(text="Added Successfully", fg="green")
-            self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+            if (place == "mainwindow"):
+                self.added_labels[id].config(text="Added Successfully", fg="green")
+                self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+            else:
+                self.feedback.config(text="Added Successfully", fg="green")
+                self.feedback.after(1500, lambda: self.feedback.config(text="", fg="black"))
         else:
-            self.added_labels[id].config(text="Out Of Stock", fg="red")
-            self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+            if (place == "mainwindow"):
+                self.added_labels[id].config(text="Out Of Stock", fg="red")
+                self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+            else:
+                self.feedback.config(text="Out Of Stock", fg="red")
+                self.feedback.after(3000, lambda: self.feedback.config(text="", fg="black"))
 
     def cartwindow(self, username, cart):
         self.cart_window = tk.Toplevel(self.loginWindow)
@@ -1054,10 +1062,10 @@ class Gui():
             self.cart_window.destroy()
             self.profile(username)
 
-    def bookInfo(self, book, name, author):
+    def bookInfo(self, book, name, author, id,username):
         self.destruction()
 
-        self.canvas = tk.Canvas(self.loginWindow, width=700, height=900)
+        self.canvas = tk.Canvas(self.loginWindow, width=800, height=900)
         self.scrollable_frame = tk.Frame(self.canvas)  # Create a new frame
 
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
@@ -1093,40 +1101,24 @@ class Gui():
         line = tk.Label(self.scrollable_frame, text="-" * 128, justify="left")
         line.pack(side="top")
 
-        describe = """als;djkfh alsdkjfh asl';dkjfh as'lf
-as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
-asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
-aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
-klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
-k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
-;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
-;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfh
-als;djkfh alsdkjfh asl';dkjfh as'lf
-as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
-asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
-aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
-klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
-k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
-;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
-;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfhals;djkfh alsdkjfh asl';dkjfh as'lf
-as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
-asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
-aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
-klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
-k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
-;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
-;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfh"""  # Your text here
+        describe = str(db.get_book_descreption(id)[0])
 
         content = tk.Label(self.scrollable_frame, text=describe, font=("Times New Roman", 14),
-                           justify="center")  # Add the label to the frame
-        content.pack(side="top")
+                           justify="center", wraplength=760)  # Add the label to the frame
+        content.pack(side="top", padx= 10, fill="x")
 
         # Create two buttons
-        button1 = tk.Button(self.scrollable_frame, text="Add to cart", command=self.add_to_cart)
-        button1.pack(side="left", padx=5, pady=5)
+        button1 = tkk.Button(self.scrollable_frame, text="Add to cart",
+                             command=lambda : self.add_to_cart(username, id, "bookinfo"),
+                             style="dark")
+        button1.pack(side="left", padx=10, pady=5, expand = True)
 
-        button2 = tk.Button(self.scrollable_frame, text="Go back", command=self.mainWindow)
-        button2.pack(side="right", padx=5, pady=5)
+        button2 = tkk.Button(self.scrollable_frame, text="Go back", command=lambda : self.mainWindow(username)
+                             , style="dark", width=10)
+        button2.pack(side="right", padx=10, pady=5, expand = True)
+
+        self.feedback = tk.Label(self.scrollable_frame, font=("Times New Roman", 30))
+        self.feedback.pack(side= "bottom", pady= 20)
 
         self.scrollable_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
