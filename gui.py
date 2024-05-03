@@ -843,8 +843,7 @@ class Gui():
             self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11), wraplength=140)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
-            self.bookName.bind("<Button-1>",
-                               lambda event, command=lambda b_cover=image_path: self.bookInfo(b_cover): command())
+            self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path: self.bookInfo(b_cover,name,author): command())
             self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
 
@@ -1055,22 +1054,79 @@ class Gui():
             self.cart_window.destroy()
             self.profile(username)
 
-    def bookInfo(self, book):
+    def bookInfo(self, book, name, author):
         self.destruction()
-        self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
+
+        self.canvas = tk.Canvas(self.loginWindow, width=700, height=900)
+        self.scrollable_frame = tk.Frame(self.canvas)  # Create a new frame
+
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
-        self.scrollbar_h = tk.Scrollbar(self.loginWindow, orient="horizontal", command=self.canvas.xview)
-        self.canvas.config(yscrollcommand=self.scrollbar.set, xscrollcommand=self.scrollbar_h.set)
+
+        self.canvas.config(yscrollcommand=self.scrollbar.set)
 
         self.scrollbar.pack(side="right", fill="y")
-        self.scrollbar_h.pack(side="bottom", fill="x")
         self.canvas.pack(side="left", fill="both", expand=True, pady=20)
-        img = Image.open(book)
-        img = img.resize((130, 200))
 
+        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")  # Add the frame to the canvas
+
+        img = Image.open(book)
+        img = img.resize((300, 400))
         self.tk_img2 = ImageTk.PhotoImage(img)
-        photo = tk.Label(self.canvas, image=self.tk_img2)
+        photo = tk.Label(self.scrollable_frame, image=self.tk_img2)  # Add the label to the frame
         photo.pack(side="top")
 
-        self.image_frame.update_idletasks()
+        # book name detail
+        bookName = tk.Label(self.scrollable_frame, text=f"Book Name: {name}", font=("Times New Roman", 14),
+                            justify="center")
+        bookName.pack(side="top")
+
+        # author name detail
+        authorName = tk.Label(self.scrollable_frame, text=f"Author Name: {author}", font=("Times New Roman", 14),
+                              justify="center")
+        authorName.pack(side="top")
+
+        # release date detail
+        releaseDate = tk.Label(self.scrollable_frame, text="Release Year: 1978", justify="center",
+                               font=("Times New Roman", 14))
+        releaseDate.pack(side="top")
+
+        line = tk.Label(self.scrollable_frame, text="-" * 128, justify="left")
+        line.pack(side="top")
+
+        describe = """als;djkfh alsdkjfh asl';dkjfh as'lf
+as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
+asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
+aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
+klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
+k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
+;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
+;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfh
+als;djkfh alsdkjfh asl';dkjfh as'lf
+as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
+asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
+aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
+klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
+k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
+;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
+;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfhals;djkfh alsdkjfh asl';dkjfh as'lf
+as;dkjlfha;sldfjkhas;dlfjkhasdl;fkjh 
+asldhfa;ldifhyasdl;kfyh asldkfhasdlfkh
+aksjdhfa;lsdjfyhasl'djkfhas'l;dkfhasldkfh
+klasj;dfh;asldjkfhas;'ldjfkhas;ldkfha;sldkfh
+k;lajydhf;lasjdkhfas;lfjhasl;dfha;sldfhk;lsadfhk
+;lkasjdhf;lasdfkjhas;ldfh asl;dkfhas;ldfkhla;sdfhk
+;kjashfd;alsjfh;lsafhsal;dfha;slfhl;sadfh;lasfh"""  # Your text here
+
+        content = tk.Label(self.scrollable_frame, text=describe, font=("Times New Roman", 14),
+                           justify="center")  # Add the label to the frame
+        content.pack(side="top")
+
+        # Create two buttons
+        button1 = tk.Button(self.scrollable_frame, text="Add to cart", command=self.add_to_cart)
+        button1.pack(side="left", padx=5, pady=5)
+
+        button2 = tk.Button(self.scrollable_frame, text="Go back", command=self.mainWindow)
+        button2.pack(side="right", padx=5, pady=5)
+
+        self.scrollable_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
