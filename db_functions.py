@@ -220,3 +220,10 @@ def get_book_quantity(book_id):
     conn.close()
     #print(quantity)
     return quantity
+def get_images_From_market():
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT cover, name, author, id  FROM books")
+    books_paths = c.fetchall()
+    conn.close()
+    return books_paths
