@@ -873,42 +873,42 @@ class Gui():
 
         # -------------------------------------------------------------------
         # search bar
-        self.searchbar = tk.Frame(self.topframe, width=1200, height=100)
-        self.searchbar.pack(side="bottom", fill="both")
-        self.lbl_search = tk.Label(self.searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
-        self.lbl_search.grid(row=0, column=0)
-        self.ent_search = tk.Entry(self.searchbar, width=90)
+        #self.searchbar = tk.Frame(self.topframe, width=1200, height=100)
+        #self.searchbar.pack(side="bottom", fill="both")
+        #self.lbl_search = tk.Label(self.searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
+        #self.lbl_search.grid(row=0, column=0)
+        #self.ent_search = tk.Entry(self.searchbar, width=90)
+        #
+        #def on_entry_click(event):
+        #    """Function to handle when the user clicks inside the entry."""
 
-        def on_entry_click(event):
-            """Function to handle when the user clicks inside the entry."""
+        #    if self.ent_search.get() == "Search Here":
+        #        self.ent_search.delete(0, tk.END)  # Clear the placeholder text
+        #        self.ent_search.config(fg='black')  # Change text color to black
 
-            if self.ent_search.get() == "Search Here":
-                self.ent_search.delete(0, tk.END)  # Clear the placeholder text
-                self.ent_search.config(fg='black')  # Change text color to black
+        #def on_focus_out(event):
+        #    """Function to handle when the self.ent_search loses focus."""
 
-        def on_focus_out(event):
-            """Function to handle when the self.ent_search loses focus."""
+        #    if self.ent_search.get() == "":
+        #        self.ent_search.insert(0, "Search Here")  # Restore placeholder text
+        #        self.ent_search.config(fg='grey')  # Change text color to grey
 
-            if self.ent_search.get() == "":
-                self.ent_search.insert(0, "Search Here")  # Restore placeholder text
-                self.ent_search.config(fg='grey')  # Change text color to grey
+        #def search():
+        #   """Function to handle the search."""
 
-        def search():
-            """Function to handle the search."""
+        #   search_term = self.ent_search.get()
+        #  print("Searching for:", search_term)
 
-            search_term = self.ent_search.get()
-            print("Searching for:", search_term)
-
-        self.ent_search.bind("<FocusIn>", on_entry_click)
-        self.ent_search.bind("<FocusOut>", on_focus_out)
+        #self.ent_search.bind("<FocusIn>", on_entry_click)
+        #self.ent_search.bind("<FocusOut>", on_focus_out)
 
         # search button
-        self.search_button = tk.Button(self.searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
-        self.search_button.grid(row=0, column=0, padx=10, pady=5)
+        #self.search_button = tk.Button(self.searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
+        #self.search_button.grid(row=0, column=0, padx=10, pady=5)
 
         # Perform search operation here
-        self.ent_search.insert(0, "Search here")
-        self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
+        #self.ent_search.insert(0, "Search here")
+        #self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
         self.profile_img = Image.open("resources/profile.png")
