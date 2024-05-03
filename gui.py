@@ -128,17 +128,23 @@ class Gui():
         quantity_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
         quantity_entry.grid(row=2, column=1)
 
+        author_label = tkk.Label(new_window, text="Author", font=("Comic Sans MS", 12))
+        author_label.grid(row=3, column=0)
+        author_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
+        author_entry.grid(row=3, column=1)
+
         # Function to add the book to the database
         def add_book_to_db():
             name = name_entry.get()
             cover = cover_entry.get()
             quantity = quantity_entry.get()
-            db.add_book(name, cover, quantity)
+            author = author_entry.get()
+            db.add_book(name, cover, quantity,author)
 
         # Create an 'Add Book' button
         add_button = tk.Button(new_window, text="Add Book", font=("Comic Sans MS", 12), foreground="blue",
                                command=lambda:[add_book_to_db(),new_window.destroy(),self.admin(username)])
-        add_button.grid(row=3, column=0, columnspan=2)
+        add_button.grid(row=4, column=0, columnspan=2)
 
     def destruction(self):
         try:
@@ -535,7 +541,7 @@ class Gui():
         booklist = db.get_books()  # This should return a list of tuples with book info
 
         for i, book in enumerate(booklist):
-            book_id, book_name, book_cover, book_quantity = book
+            book_id, book_name, book_cover, book_quantity,author = book
             book_cover="images\\"+book_cover
             # Open, resize, and display the book cover
             img = Image.open(book_cover)
@@ -547,7 +553,7 @@ class Gui():
             # Create a label to display the book name
             #quantity_label = tk.Label(scrollable_frame, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
 
-            book_label = tk.Label(self.scrollable_frame, text=f"ID: {book_id}\n{book_name} \n Quantity:{str(book_quantity)}", font=("Comic Sans MS", 15), fg="black",
+            book_label = tk.Label(self.scrollable_frame, text=f"ID: {book_id}\n{book_name} \n Quantity:{str(book_quantity)}\nAuthor:{author}", font=("Comic Sans MS", 15), fg="black",
                                   wraplength=150)
 
             # Determine the row and column for each book
@@ -607,11 +613,13 @@ class Gui():
 
             # Create a canvas and scrollbar
 
-        self.canvas = tk.Canvas(self.loginWindow)
+        self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
-        self.canvas.config(yscrollcommand=self.scrollbar.set)
+        self.scrollbar_h = tk.Scrollbar(self.loginWindow, orient="horizontal", command=self.canvas.xview)
+        self.canvas.config(yscrollcommand=self.scrollbar.set, xscrollcommand=self.scrollbar_h.set)
 
         self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar_h.pack(side="bottom", fill="x")
         self.canvas.pack(side="left", fill="both", expand=True, pady=20)
 
         # Create a frame inside the canvas to hold the images
@@ -621,45 +629,9 @@ class Gui():
         # Add images to the image frame
         self.images = []
         i = 0
-        j = 150
+        j = 0  # For two columns, initialize j as 0
 
-        for image_path, book_name, book_author, id in image_paths[:12]:
-            name, author = book_name, book_author
-
-            img = Image.open(image_path)
-            img = img.resize((130, 200))
-            tk_img = ImageTk.PhotoImage(img)
-            self.images.append(tk_img)
-            label = tk.Label(self.image_frame, image=tk_img)
-            label.grid(row=i, column=0, pady=10)
-
-            txt = tk.Frame(self.image_frame)
-            txt.grid(row=i, column=100, padx=10)
-
-            # book name
-            bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
-            bookName.grid(row=i, column=100, pady=10)
-
-            # hyperlinks of books names
-            bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
-            bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
-            bookName.bind("<Leave>", lambda event: bookName.config(cursor="arrow", fg="black"))
-
-            # author name
-            bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
-            bookAuthor.grid(row=i + 10, column=100)
-
-            # add to cart
-            # add to cart
-            cart = tkk.Button(txt, text="add to cart", width=12, bootstyle="dark",
-                              command=lambda: self.add_to_cart(username, id))
-            cart.grid(row=i + 20, column=100)
-
-            i += 150
-
-        # second column for books
-        i = 0
-        for image_path, book_name, book_author, id in image_paths[12:]:
+        for image_path, book_name, book_author, id in image_paths:
             name, author = book_name, book_author
 
             img = Image.open(image_path)
@@ -670,26 +642,25 @@ class Gui():
             label.grid(row=i, column=j, pady=10)
 
             txt = tk.Frame(self.image_frame)
-            txt.grid(row=i, column=100 + j, padx=10)
+            txt.grid(row=i, column=j + 1, padx=10)  # Adjust column for author, buttons, etc.
 
             # book name
             bookName = tk.Label(txt, text=name, font=("Times New Roman", 11))
-            bookName.grid(row=i, column=100 + j, pady=10)
-
-            # hyperlinks of books names
-            bookName.bind("<Button-1>", lambda event, cmd=open_link_1: cmd())
-            bookName.bind("<Enter>", bookName.config(cursor="hand2", fg="blue"))
-            bookName.bind("<Leave>", lambda event: bookName.config(cursor="arrow", fg="black"))
+            bookName.grid(row=0, column=0, pady=10)
 
             # author name
             bookAuthor = tk.Label(txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
-            bookAuthor.grid(row=i + 10, column=100 + j)
+            bookAuthor.grid(row=1, column=0)
 
             # add to cart
-            cart = tk.Button(txt, text="add to cart", width=12, height=1, command=lambda: self.add_to_cart(username, id))
-            cart.grid(row=i + 20, column=100 + j)
+            cart = tk.Button(txt, text="add to cart", width=12, height=1,
+                             command=lambda b_id=id: [self.add_to_cart(username, b_id),print(b_id)])
+            cart.grid(row=2, column=0)
 
-            i += 150
+            i += 1
+            if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
+                i = 0
+                j += 2  # Move to the next column for the next set of books
 
         # Update the canvas scroll region
         self.image_frame.update_idletasks()
@@ -735,15 +706,18 @@ class Gui():
         self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
-        img = Image.open("resources/profile.png")
-        img = img.resize((130, 200))
-        self.tk_img = ImageTk.PhotoImage(img)  # Store the image object in an instance variable
-        profile_button = tkk.Button(self.loginWindow, command=open_link_1, image=self.tk_img)
+        profile_img = Image.open("resources/profile.png")
+        profile_img = profile_img.resize((40, 40))
+        self.profile_img = ImageTk.PhotoImage(profile_img)  # Store the image object in an instance variable
+        profile_button = tkk.Button(self.loginWindow, command=open_link_1,bootstyle="link", image=self.profile_img)
         profile_button.place(x=0, y=0)
 
         # sign out button
-        sign_out_button = tk.Button(self.loginWindow, text="sign out", command=open_link_1, width=9, height=1, bg="#ffffff")
-        sign_out_button.place(x=620, y=25)
+        sign_out_img = Image.open("resources/leaving.png")
+        sign_out_img = sign_out_img.resize((50, 50))
+        self.sign_out_img = ImageTk.PhotoImage(sign_out_img)
+        sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
+        sign_out_button.place(x=740, y=0)
 
     def add_to_cart(self,user_name, id):
         item = [user_name, id]
