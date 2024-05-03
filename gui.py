@@ -1082,6 +1082,8 @@ class Gui():
 
         def emptycart():
             self.cart = []
+            self.db_quantities = db.check_item_quantity()
+            self.db_quantities = dict(self.db_quantities)
             self.cart_window.destroy()
             self.cartframe.destroy()
             self.cartwindow(username, self.cart)
