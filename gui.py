@@ -1000,12 +1000,13 @@ class Gui():
                 self.txtcart = tk.Frame(self.cartimage_frame)
                 self.txtcart.grid(row=k, column=a + 1, padx=63)
                 # book name
-                self.cartbookName = tk.Label(self.txtcart, text=bookNamedb, font=("Times New Roman", 11),
+                self.cartbookName = tk.Label(self.txtcart, text=bookNamedb, font=("Times New Roman", 20),
                                              wraplength=140)
                 self.cartbookName.grid(row=0, column=0, pady=10)
 
-                self.remove_from_cart = tk.Button(self.txtcart, text="remove from cart",
-                                                  command=lambda c_id=Bookid: [remove_from_cart(username, c_id)])
+                self.remove_from_cart = tkk.Button(self.txtcart, text="remove from cart",
+                                                  command=lambda c_id=Bookid: [remove_from_cart(username, c_id)]
+                                                   ,style="danger",width=15)
                 self.remove_from_cart.grid(row=2, column=0)
 
                 k += 1
@@ -1014,12 +1015,12 @@ class Gui():
                     a += 2  # Move to the next column for the next set of books
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
-            self.cart_confirm_button = tk.Button(self.cart_window, text="Confirm The purchase",
-                                                 font=("Comic Sans MS", 12),
-                                                 foreground="blue", command=lambda: buy(username, books))
+            self.cart_confirm_button = tkk.Button(self.cart_window, text="Confirm The purchase",
+                                                  command=lambda: buy(username, books)
+                                                 ,style="success",width=20)
             self.cart_confirm_button.place(x=500, y=800)
-            self.cart_clear_button = tk.Button(self.cart_window, text="Empty Cart", font=("Comic Sans MS", 12),
-                                               foreground="red", command=lambda: emptycart())
+            self.cart_clear_button = tkk.Button(self.cart_window, text="Empty Cart", command=lambda: emptycart(),
+                                                style="warning")
             self.cart_clear_button.place(x=250, y=800)
         else:
             self.empty_massage = tkk.Label(self.cartimage_frame, text="No Books Found", foreground="Red",
