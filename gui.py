@@ -478,6 +478,10 @@ class Gui():
             self.scrollbar_h1.destroy()
         except Exception as e:
             pass
+        try:
+            self.ownedbookslabel.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -589,8 +593,10 @@ class Gui():
                 self.duplicate.config(text="You Have To Fulfill All The Fields")
         else:
             self.duplicate.config(text="Not Available Username")
-    def profile(self,username):
+
+    def profile(self, username):
         self.destruction()
+        folder = "images\\"
         self.loginWindow.title('Profile')
         self.img = Image.open("resources/download.jpeg")
         # Resize the image
@@ -598,48 +604,96 @@ class Gui():
         self.img = ImageTk.PhotoImage(self.img)
         # Create a label and add the image to it
         self.imglabel = tkk.Label(self.loginWindow, image=self.img)
-        self.imglabel.grid(row=0, column=0, sticky='nw')
+        self.imglabel.pack(anchor='nw')
+        # Open the sign out icon image
+        self.signout_img = Image.open("resources/leaving.png")
+        self.signout_img = self.signout_img.resize((70, 70))  # Resize the image
+        self.signout_img = ImageTk.PhotoImage(self.signout_img)
+
+        # Create a button with the sign out icon
+        self.signout_button = tk.Button(self.loginWindow, image=self.signout_img, command=lambda: self.login_Window(),
+                                        highlightthickness=0, bd=0)
+        self.signout_button.image = self.signout_img
+        # Place the sign out button at the top right of the window
+        self.signout_button.place(relx=1, rely=0, anchor='ne')
 
         userlist = db.searchByUsername(username)
 
         # Create a label to display the name
-        namelocation = tkk.Label(self.loginWindow, text="Name:", font=("Comic Sans MS", 20), foreground="brown")
-        namelocation.place(x=120, y=5)
-        namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
-        namelabel.place(x=130, y=45)
+        self.namelocation = tkk.Label(self.loginWindow, text="Name:", font=("Comic Sans MS", 20), foreground="brown")
+        self.namelocation.place(x=120, y=5)
+        self.namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
+        self.namelabel.place(x=130, y=45)
+        self.centerFrame = tk.Frame(self.loginWindow, width=1250, height=15, borderwidth=2)
+        self.centerFrame.pack()
+        self.ownedbookslabel = tkk.Label(self.loginWindow, text="Owned Books", font=("Comic Sans MS", 20),
+                                         foreground="black", background="cyan", anchor="center", justify="center")
+        self.ownedbookslabel.pack(fill="both")
 
-        ownedbookslabel = tkk.Label(self.loginWindow, text="Owned Books", font=("Comic Sans MS", 20),
-                                    foreground="black", background="cyan")
-        ownedbookslabel.place(relx=0.5, rely=0.16, anchor='center')
+        self.frame2 = Frame(self.loginWindow)
+        self.frame2.pack(pady=10)
+        # Create a new frame
+        self.frame = Frame(self.loginWindow)
+        self.frame.pack(fill='both', expand=True)  # Adjust the fill and expand options
 
-        booklist = db.get_user_books(username)  # This should return a list of tuples with book info
+        # Create a canvas and a vertical scrollbar
+        self.canvas = Canvas(self.frame)
+        self.scrollbar = Scrollbar(self.frame, orient="vertical", command=self.canvas.yview)
+        self.scrollable_frame = tk.Frame(self.canvas)
 
-        for i, book in enumerate(booklist):
-            book_name, book_cover, book_quantity = book
+        # Bind the scroll wheel event to the yview_scroll method
+        self.canvas.bind("<MouseWheel>",
+                         lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
+        self.canvas.bind("<Button-4>", lambda event: self.canvas.yview_scroll(int(-1), "units"))  # For Linux
+        self.canvas.bind("<Button-5>", lambda event: self.canvas.yview_scroll(int(1), "units"))  # For Linux
 
-            # Calculate the row and column based on the index
-            row = i // 2  # Integer division gives the row number
-            col = i % 2  # Remainder gives the column number
+        # Configure the canvas to be scrollable
+        self.canvas.configure(yscrollcommand=self.scrollbar.set)
+        self.canvas.pack(side="left", fill="both", expand=True)
+        self.scrollbar.pack(side="right", fill="y")
+        # Create a frame inside the canvas to hold the images
+        self.image_frame = tk.Frame(self.canvas)
+        self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
 
-            # Create a label to display the book name
-            book_label = tk.Label(self.loginWindow, text=book_name, font=("Comic Sans MS", 15), fg="black",
-                                  wraplength=120)
-            book_label.place(x=200 + col * 170 * 2,
-                             y=230 + row * 210)  # Adjust the x and y coordinates based on the row and column
+        # Add images to the image frame
+        self.images = []
 
-            # Open, resize, and display the book cover
-            book_cover = "images\\" + book_cover
-            img = Image.open(book_cover)
-            img = img.resize((150, 200))  # Resize the image
-            img = ImageTk.PhotoImage(img)
-            img_label = tk.Label(self.loginWindow, image=img)
-            img_label.image = img  # Keep a reference to the image
-            img_label.place(x=10 + col * 170 * 2,
-                            y=180 + row * 210)  # Adjust the x and y coordinates based on the row and column
+        self.added_labels = {}
+        booklist = db.get_user_books(username)
+        for s, book in enumerate(booklist):
+            book_id, book_name, book_cover, book_quantity, author,description = book
 
-            # Create a label to display the book quantity
-            # quantity_label = tk.Label(self.loginWindow, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")
-            # quantity_label.place(x=280, y=85 + i * 60)
+            img = Image.open(folder + book_cover)
+            img = img.resize((130, 200))
+            tk_img = ImageTk.PhotoImage(img)
+            row = s // 2  # Integer division - each row will contain 2 books
+            col = s % 2 * 2  # Each book
+            self.images.append(tk_img)
+            self.label = tk.Label(self.image_frame, image=tk_img)
+            self.label.grid(row=row, column=col, pady=10)
+
+            self.txt = tk.Frame(self.image_frame)
+            self.txt.grid(row=row, column=col + 1, padx=63)
+            # book name
+            self.bookName = tk.Label(self.txt, text=book_name, font=("Times New Roman", 15), wraplength=140)
+            self.bookName.grid(row=0, column=0, pady=0)
+            # hyperlinks of books names
+            self.bookName.bind("<Button-1>",
+                               lambda event, command=lambda: self.reading(): command())
+            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
+            self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
+
+            # author name
+            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 12), anchor="sw")
+            self.bookAuthor.grid(row=1, column=0)
+
+            self.bookDetails = tk.Button(self.txt, text="Book Details", width=12, height=1,
+                                         command=lambda b_cover=book_cover, a_id = book_id, usernamet = username: self.bookInfo((folder +b_cover),book_name,author,a_id,usernamet,True))
+            self.bookDetails.grid(row=2, column=0, pady=10)
+
+        # Update the canvas scroll region
+        self.image_frame.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
 
     def admin(self,username):
         self.destruction()
@@ -808,6 +862,8 @@ class Gui():
 
             # Create a canvas and scrollbar
 
+        self.centerFrame = tk.Frame(self.loginWindow, width=1250, height=17, borderwidth=2)
+        self.centerFrame.pack()
         self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
         self.scrollbar_h = tk.Scrollbar(self.loginWindow, orient="horizontal", command=self.canvas.xview)
@@ -828,19 +884,20 @@ class Gui():
         self.added_labels = {}
         for image_path, book_name, book_author, id in image_paths:
             name, author = book_name, book_author
-
+            row = i // 2  # Integer division - each row will contain 2 books
+            col = j % 2 * 2
             img = Image.open(image_path)
             img = img.resize((130, 200))
             tk_img = ImageTk.PhotoImage(img)
 
             self.images.append(tk_img)
             self.label = tk.Label(self.image_frame, image=tk_img)
-            self.label.grid(row=i, column=j, pady=10)
+            self.label.grid(row=row, column=col, pady=10)
 
             self.txt = tk.Frame(self.image_frame)
-            self.txt.grid(row=i, column=j + 1, padx=63)
+            self.txt.grid(row=row, column=col + 1, padx=46)
             # book name
-            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 25), wraplength=180)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 20), wraplength=160)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
             self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
@@ -861,11 +918,8 @@ class Gui():
             # Create a label for each book and store it in the dictionary
             self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 15), wraplength=140)
             self.added_labels[id].grid(row=3, column=0, pady=5)
-
-            i += 1
-            if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
-                i = 0
-                j += 2  # Move to the next column for the next set of books
+            i+=1
+            j+=1
 
         # Update the canvas scroll region
         self.image_frame.update_idletasks()
@@ -966,13 +1020,12 @@ class Gui():
         self.header = tk.Label(self.cartframe, text="CART", fg="black")
         self.header.config(font=("Times New Roman", 40))
         self.header.pack()
-        self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=500)  # Adjust width and height as needed
+        self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=300)  # Adjust width and height as needed
         self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
-        self.scrollbar_h1 = tk.Scrollbar(self.cart_window, orient="horizontal", command=self.cartcanvas.xview)
         self.cartcanvas.config(yscrollcommand=self.scrollbar1.set, xscrollcommand=self.scrollbar_h.set)
 
         self.scrollbar1.pack(side="right", fill="y")
-        self.scrollbar_h1.pack(side="bottom", fill="x")
+
         self.cartcanvas.pack(side="left", fill="both", expand=True, pady=20)
 
         # Create a frame inside the canvas to hold the images
@@ -990,15 +1043,17 @@ class Gui():
         if len(books) > 0:
             for bookNamedb, bookCoverdb, Quantitydb, Bookid in books:
                 bookCoverdb = "images\\" + bookCoverdb
+                row = a // 2  # Integer division - each row will contain 2 books
+                col = k % 2 * 2
                 img = Image.open(bookCoverdb)
                 img = img.resize((130, 200))
                 tk_img = ImageTk.PhotoImage(img)
                 self.cartimages.append(tk_img)
                 self.cartlabel = tkk.Label(self.cartimage_frame, image=tk_img)
-                self.cartlabel.grid(row=k, column=a, pady=10)
+                self.cartlabel.grid(row=row, column=col, pady=10)
 
                 self.txtcart = tk.Frame(self.cartimage_frame)
-                self.txtcart.grid(row=k, column=a + 1, padx=63)
+                self.txtcart.grid(row=row, column=col + 1, padx=63)
                 # book name
                 self.cartbookName = tk.Label(self.txtcart, text=bookNamedb, font=("Times New Roman", 20),
                                              wraplength=140)
@@ -1010,9 +1065,7 @@ class Gui():
                 self.remove_from_cart.grid(row=2, column=0)
 
                 k += 1
-                if k % 3 == 0:  # Change to 6 for two columns, adjust as needed
-                    k = 0
-                    a += 2  # Move to the next column for the next set of books
+                a+=1  # Move to the next column for the next set of books
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
             self.cart_confirm_button = tkk.Button(self.cart_window, text="Confirm The purchase",
@@ -1064,7 +1117,7 @@ class Gui():
             self.cart_window.destroy()
             self.profile(username)
 
-    def bookInfo(self, book, name, author, id,username):
+    def bookInfo(self, book, name, author, id,username,place=False):
         self.destruction()
 
         self.canvas = tk.Canvas(self.loginWindow, width=800, height=900)
@@ -1109,18 +1162,33 @@ class Gui():
                            justify="center", wraplength=760)  # Add the label to the frame
         content.pack(side="top", padx= 10, fill="x")
 
-        # Create two buttons
-        button1 = tkk.Button(self.scrollable_frame, text="Add to cart",
-                             command=lambda : self.add_to_cart(username, id, "bookinfo"),
-                             style="dark")
-        button1.pack(side="left", padx=10, pady=5, expand = True)
+        if not place:
+            button1 = tkk.Button(self.scrollable_frame, text="Add to cart",
+                                 command=lambda : self.add_to_cart(username, id, "bookinfo"),
+                                 style="dark")
+            button1.pack(side="left", padx=10, pady=5, expand = True)
 
-        button2 = tkk.Button(self.scrollable_frame, text="Go back", command=lambda : self.mainWindow(username)
-                             , style="dark", width=10)
-        button2.pack(side="right", padx=10, pady=5, expand = True)
+            button2 = tkk.Button(self.scrollable_frame, text="Go back", command=lambda : self.mainWindow(username)
+                                 , style="dark", width=10)
+            button2.pack(side="right", padx=10, pady=5, expand = True)
 
-        self.feedback = tk.Label(self.scrollable_frame, font=("Times New Roman", 30))
-        self.feedback.pack(side= "bottom", pady= 20)
+            self.feedback = tk.Label(self.scrollable_frame, font=("Times New Roman", 30))
+            self.feedback.pack(side= "bottom", pady= 20)
+        else:
+            button2 = tkk.Button(self.scrollable_frame, text="Go back", command=lambda: self.profile(username)
+                                 , style="dark", width=10)
+            button2.pack(expand=True,pady=10)
 
         self.scrollable_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
+    def reading(self):
+        new_window = tk.Toplevel(self.loginWindow)
+        new_window.title("Reading")
+        new_window.geometry("400x400")
+        new_window.resizable(False, False)
+        label = tkk.Label(new_window,
+                          text="You should be able to read a PDF book here, but the deadline is 2 days later, so what are you talking about?\n :)",
+                          wraplength=300, font=("Comic Sans MS", 20), foreground="red", anchor="center",
+                          justify="center")
+        label.pack(expand=True)

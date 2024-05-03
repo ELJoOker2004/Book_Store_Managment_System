@@ -193,7 +193,7 @@ def get_user_books(username):
     books_ids = c.fetchall()
     user_books = []
     for book_id in books_ids:
-        c.execute("SELECT name, cover, quantity FROM books WHERE id = ?", (book_id[0],))
+        c.execute("SELECT id,name, cover, quantity,author,descreption FROM books WHERE id = ?", (book_id[0],))
         book = c.fetchone()
         user_books.append(book)
     conn.close()
