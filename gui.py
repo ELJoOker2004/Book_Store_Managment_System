@@ -57,7 +57,7 @@ class Gui():
         confirm = tk.Button(new_window, text="Confirm", font=("Comic Sans MS", 12),foreground="blue", command= lambda:[db.delete_book(id_var.get()),self.admin(username),new_window.destroy(),self.open_new_window(username)])
         confirm.pack(side="left")
 
-    def open_members_window(self):
+    def open_members_window(self,ogusername):
         # Create a new window
         new_window = tk.Toplevel(self.loginWindow)
         new_window.title('Members')
@@ -104,8 +104,8 @@ class Gui():
                 db.change_role(role_var.get(), username)
 
         confirm = tk.Button(new_window, text="Confirm", font=("Comic Sans MS", 12), foreground="blue",
-                            command=lambda:[confirm_roles,new_window.destroy()])  # Update the command
-        confirm.grid()
+                            command=lambda:[confirm_roles(),new_window.destroy(),self.admin(ogusername)])  # Update the command
+        confirm.grid(columnspan=4,column=0)
 
     def add_book_window(self,username):
         # Create a new window
@@ -260,6 +260,18 @@ class Gui():
             self.manage_members_button.destroy()
         except Exception as e:
             pass
+        try:
+            self.namelocation.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.namelabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollable_frame.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -321,15 +333,11 @@ class Gui():
             self.invalid.config(text="Invalid username or password")
 
     def create_account(self):
-        self.app.destroy()
-        self.frame.destroy()
-        self.username_entry.destroy()
-        self.username_label.destroy()
-        self.password_entry.destroy()
-        self.password_label.destroy()
-        self.login_button.destroy()
-        self.invalid.destroy()
-        self.createuser.destroy()
+        try:
+            self.unauthorized.destroy()
+        except:
+            pass
+        self.destruction()
         self.loginWindow.title('Create Account')
         self.app = Application("welcome-anime.gif",22,90, master=self.loginWindow)
         self.app.pack()
@@ -435,8 +443,13 @@ class Gui():
 
     def admin(self,username):
         self.destruction()
+
         self.app.destroy()
         self.frame.destroy()
+        try:
+            self.unauthorized.destroy()
+        except:
+            pass
         self.username_entry.destroy()
         self.username_label.destroy()
         self.password_entry.destroy()
@@ -444,7 +457,12 @@ class Gui():
         self.login_button.destroy()
         self.invalid.destroy()
         self.createuser.destroy()
-
+        if db.isAdmin(username):
+            pass
+        else:
+            self.unauthorized = tkk.Label(self.loginWindow, text="Unauthorized Access",foreground="red",font=(50))
+            self.unauthorized.pack(fill="both",side="bottom",padx=320)
+            self.login_Window()
         self.loginWindow.title('Admin Page')
         self.img = Image.open("download.jpeg")
         # Resize the image
@@ -471,7 +489,7 @@ class Gui():
         self.namelocation.place(x=120, y=5)
         self.namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
         self.namelabel.place(x=130, y=45)
-        self.manage_members_button = tk.Button(self.loginWindow, text="Manage Members", font=("Comic Sans MS", 12),foreground="blue", command=lambda: self.open_members_window())
+        self.manage_members_button = tk.Button(self.loginWindow, text="Manage Members", font=("Comic Sans MS", 12),foreground="blue", command=lambda: self.open_members_window(username))
         self.manage_members_button.place(x=5, y=115)
         self.add_book_button = tk.Button(self.loginWindow, text="Add New Book",font=("Comic Sans MS", 12),foreground="blue", command=lambda: self.add_book_window(username))
         self.add_book_button.place(x=150, y=115)

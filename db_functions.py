@@ -146,8 +146,9 @@ def add_user(username, password,name):
     cursor = conn.cursor()
 
     hashed_password = hash_password(password)
+    role = "member"
     try:
-        cursor.execute("INSERT INTO users (username, password, name) VALUES (?, ?, ?)", (username, hashed_password, name))
+        cursor.execute("INSERT INTO users (username, password, name,role) VALUES (?, ?, ?,?)", (username, hashed_password, name,role))
         conn.commit()
         conn.close()
         return True
