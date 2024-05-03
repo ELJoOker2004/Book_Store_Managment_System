@@ -618,8 +618,8 @@ class Gui():
         # Configure the canvas to be scrollable
         self.scrollable_frame.bind(
             "<Configure>",
-            lambda e: canvas.configure(
-                scrollregion=canvas.bbox("all")
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
             )
         )
 
@@ -728,7 +728,7 @@ class Gui():
         self.images = []
         i = 0
         j = 0  # For two columns, initialize j as 0
-
+        self.added_labels = {}
         for image_path, book_name, book_author, id in image_paths:
             name, author = book_name, book_author
 
@@ -750,9 +750,15 @@ class Gui():
             self.bookAuthor.grid(row=1, column=0)
 
             # add to cart
+            # add to cart
             self.cartbutton = tk.Button(self.txt, text="add to cart", width=12, height=1,
-                             command=lambda b_id=id: [self.add_to_cart(username, b_id),print(b_id)])
+                                        command=lambda b_id=id: [self.add_to_cart(username, b_id)])
             self.cartbutton.grid(row=2, column=0)
+
+            # Create a label for each book and store it in the dictionary
+            self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 10), wraplength=140)
+            self.added_labels[id].grid(row=3, column=0, pady=5)
+
 
             i += 1
             if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
@@ -816,9 +822,13 @@ class Gui():
         self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
         self.sign_out_button.place(x=740, y=0)
 
-    def add_to_cart(self,user_name, id):
+    def add_to_cart(self, user_name, id):
         item = [user_name, id]
-        self.cart.append(item)
-        print(self.cart)
+        item_check = db.check_item_quantity(item)
+        if item_check:
+            self.cart.append(item)
+            self.added_labels[id].config(text="Added Successfully", fg="green")
+        else:
+            self.added_labels[id].config(text="Out Of Stock", fg="red")
 
 
