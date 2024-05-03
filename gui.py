@@ -398,6 +398,86 @@ class Gui():
             self.cart_confirm_button.destroy()
         except Exception as e:
             pass
+        try:
+            self.cartframe.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.header.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartcanvas.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartbutton.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_window.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartimage_frame.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar_h.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartlabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.txtcart.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartbookName.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.remove_from_cart.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_clear_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.empty_massage.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartlabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_window.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar1.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar_h1.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -699,9 +779,8 @@ class Gui():
             minus_button = tkk.Button(self.scrollable_frame, image=minus_image,bootstyle="link",command=lambda b_id=book_id: [db.decrease_book(b_id), self.admin(username)])
             minus_button.image = minus_image
             minus_button.grid(row=row, column=column*2+3)
-    
 
-    def mainWindow(self,username):
+    def mainWindow(self, username):
         # List of image paths
         self.destruction()
         folder = "images\\"
@@ -712,8 +791,8 @@ class Gui():
             image[0] = folder + image[0]
             image_paths.append(image)
 
-        #scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
-        #scrollable_frame.pack(fill="both", expand=True)
+        # scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
+        # scrollable_frame.pack(fill="both", expand=True)
         # Header frame and text
         self.topframe = tk.Frame(self.loginWindow)
         self.topframe.pack(side="top")
@@ -723,10 +802,9 @@ class Gui():
         self.header.pack()
 
         # ----------------------------------------------
-        #sdlkjghdfg;ldkjsfhg 
+        # sdlkjghdfg;ldkjsfhg
         def open_link_1():
             webbrowser.open("https://www.example1.com")
-        
 
             # Create a canvas and scrollbar
 
@@ -762,13 +840,13 @@ class Gui():
             self.txt = tk.Frame(self.image_frame)
             self.txt.grid(row=i, column=j + 1, padx=63)
             # book name
-            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11),wraplength=140)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11), wraplength=140)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
-            self.bookName.bind("<Button-1>", lambda event, command = lambda: self.bookInfo("D:\python\legitimate projects\Book_Store_Managment_System\images\to kill a mocking bird.png"): command())
+            self.bookName.bind("<Button-1>",
+                               lambda event, command=lambda b_cover=image_path: self.bookInfo(b_cover): command())
             self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
-
 
             # author name
             self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
@@ -783,7 +861,6 @@ class Gui():
             # Create a label for each book and store it in the dictionary
             self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 10), wraplength=140)
             self.added_labels[id].grid(row=3, column=0, pady=5)
-
 
             i += 1
             if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
@@ -837,7 +914,8 @@ class Gui():
         self.profile_img = Image.open("resources/profile.png")
         self.profile_img = self.profile_img.resize((40, 40))
         self.profile_img = ImageTk.PhotoImage(self.profile_img)  # Store the image object in an instance variable
-        self.profile_button = tkk.Button(self.loginWindow, command=lambda  : self.profile(username),bootstyle="link", image=self.profile_img)
+        self.profile_button = tkk.Button(self.loginWindow, command=lambda: self.profile(username), bootstyle="link",
+                                         image=self.profile_img)
         self.profile_button.place(x=0, y=0)
 
         self.cart_img = Image.open("resources/face.png")
@@ -852,7 +930,8 @@ class Gui():
         self.sign_out_img = Image.open("resources/leaving.png")
         self.sign_out_img = self.sign_out_img.resize((50, 50))
         self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
-        self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
+        self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link", image=self.sign_out_img,
+                                          command=lambda: self.login_Window())
         self.sign_out_button.place(x=740, y=0)
         self.db_quantities = db.check_item_quantity()
         self.db_quantities = dict(self.db_quantities)
@@ -868,24 +947,24 @@ class Gui():
             self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
 
     def cartwindow(self, username, cart):
-        cart_window = tk.Toplevel(self.loginWindow)
-        cart_window.title('Cart Window')
-        cart_window.geometry("800x900")
-        cart_window.resizable(False, False)
+        self.cart_window = tk.Toplevel(self.loginWindow)
+        self.cart_window.title('Cart Window')
+        self.cart_window.geometry("800x900")
+        self.cart_window.resizable(False, False)
 
-        self.cartframe = tk.Frame(cart_window)
+        self.cartframe = tk.Frame(self.cart_window)
         self.cartframe.pack(side="top")
 
         self.header = tk.Label(self.cartframe, text="CART", fg="black")
         self.header.config(font=("Times New Roman", 40))
         self.header.pack()
-        self.cartcanvas = tk.Canvas(cart_window, width=700, height=500)  # Adjust width and height as needed
-        self.scrollbar = tk.Scrollbar(cart_window, orient="vertical", command=self.cartcanvas.yview)
-        self.scrollbar_h = tk.Scrollbar(cart_window, orient="horizontal", command=self.cartcanvas.xview)
-        self.cartcanvas.config(yscrollcommand=self.scrollbar.set, xscrollcommand=self.scrollbar_h.set)
+        self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=500)  # Adjust width and height as needed
+        self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
+        self.scrollbar_h1 = tk.Scrollbar(self.cart_window, orient="horizontal", command=self.cartcanvas.xview)
+        self.cartcanvas.config(yscrollcommand=self.scrollbar1.set, xscrollcommand=self.scrollbar_h.set)
 
-        self.scrollbar.pack(side="right", fill="y")
-        self.scrollbar_h.pack(side="bottom", fill="x")
+        self.scrollbar1.pack(side="right", fill="y")
+        self.scrollbar_h1.pack(side="bottom", fill="x")
         self.cartcanvas.pack(side="left", fill="both", expand=True, pady=20)
 
         # Create a frame inside the canvas to hold the images
@@ -927,10 +1006,11 @@ class Gui():
                     a += 2  # Move to the next column for the next set of books
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
-            self.cart_confirm_button = tk.Button(cart_window, text="Confirm The purchase", font=("Comic Sans MS", 12),
+            self.cart_confirm_button = tk.Button(self.cart_window, text="Confirm The purchase",
+                                                 font=("Comic Sans MS", 12),
                                                  foreground="blue", command=lambda: buy(username, books))
             self.cart_confirm_button.place(x=500, y=800)
-            self.cart_clear_button = tk.Button(cart_window, text="Empty Cart", font=("Comic Sans MS", 12),
+            self.cart_clear_button = tk.Button(self.cart_window, text="Empty Cart", font=("Comic Sans MS", 12),
                                                foreground="red", command=lambda: emptycart())
             self.cart_clear_button.place(x=250, y=800)
         else:
@@ -940,7 +1020,7 @@ class Gui():
 
         def emptycart():
             self.cart = []
-            cart_window.destroy()
+            self.cart_window.destroy()
             self.cartframe.destroy()
             self.cartwindow(username, self.cart)
 
@@ -949,7 +1029,7 @@ class Gui():
             for i in self.cart:
                 if i[0] == removeitem[0] and i[1] == removeitem[1]:
                     self.cart.remove(i)
-                    cart_window.destroy()
+                    self.cart_window.destroy()
                     self.cartframe.destroy()
                     self.cartwindow(username, self.cart)
 
@@ -972,10 +1052,10 @@ class Gui():
                 c.fetchone()
                 conn.commit()
             conn.close()
-            cart_window.destroy()
+            self.cart_window.destroy()
             self.profile(username)
 
-    def bookInfo(self,book):
+    def bookInfo(self, book):
         self.destruction()
         self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
@@ -985,15 +1065,12 @@ class Gui():
         self.scrollbar.pack(side="right", fill="y")
         self.scrollbar_h.pack(side="bottom", fill="x")
         self.canvas.pack(side="left", fill="both", expand=True, pady=20)
+        img = Image.open(book)
+        img = img.resize((130, 200))
 
-        img2 = Image.open(book)
-        
-        img2 = img2.resize((250,500))
-        tk_img2 = ImageTk.PhotoImage(img2)
-        photo = tk.Label(self.canvas, image=tk_img2)
+        self.tk_img2 = ImageTk.PhotoImage(img)
+        photo = tk.Label(self.canvas, image=self.tk_img2)
         photo.pack(side="top")
-        
-        
-        
+
         self.image_frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
