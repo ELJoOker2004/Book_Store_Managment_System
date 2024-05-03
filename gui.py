@@ -683,6 +683,7 @@ class Gui():
             minus_button = tkk.Button(self.scrollable_frame, image=minus_image,bootstyle="link",command=lambda b_id=book_id: [db.decrease_book(b_id), self.admin(username)])
             minus_button.image = minus_image
             minus_button.grid(row=row, column=column*2+3)
+    
 
     def mainWindow(self,username):
         # List of image paths
@@ -708,6 +709,7 @@ class Gui():
         #sdlkjghdfg;ldkjsfhg 
         def open_link_1():
             webbrowser.open("https://www.example1.com")
+        
 
             # Create a canvas and scrollbar
 
@@ -735,6 +737,7 @@ class Gui():
             img = Image.open(image_path)
             img = img.resize((130, 200))
             tk_img = ImageTk.PhotoImage(img)
+
             self.images.append(tk_img)
             self.label = tk.Label(self.image_frame, image=tk_img)
             self.label.grid(row=i, column=j, pady=10)
@@ -744,6 +747,11 @@ class Gui():
             # book name
             self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11),wraplength=140)
             self.bookName.grid(row=0, column=0, pady=10)
+            # hyperlinks of books names
+            self.bookName.bind("<Button-1>", lambda event, command = lambda: self.bookInfo("D:\python\legitimate projects\Book_Store_Managment_System\images\to kill a mocking bird.png"): command())
+            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
+            self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
+
 
             # author name
             self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
@@ -831,4 +839,24 @@ class Gui():
         else:
             self.added_labels[id].config(text="Out Of Stock", fg="red")
 
+    def bookInfo(self,book):
+        self.destruction()
+        self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
+        self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
+        self.scrollbar_h = tk.Scrollbar(self.loginWindow, orient="horizontal", command=self.canvas.xview)
+        self.canvas.config(yscrollcommand=self.scrollbar.set, xscrollcommand=self.scrollbar_h.set)
 
+        self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar_h.pack(side="bottom", fill="x")
+        self.canvas.pack(side="left", fill="both", expand=True, pady=20)
+
+        img2 = Image.open(book)
+        img2 = img2.resize((250,500))
+        tk_img2 = ImageTk.PhotoImage(img2)
+        photo = tk.Label(self.canvas, image=tk_img2)
+        photo.pack(side="top")
+        
+        
+        
+        self.image_frame.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
