@@ -840,25 +840,26 @@ class Gui():
             self.txt = tk.Frame(self.image_frame)
             self.txt.grid(row=i, column=j + 1, padx=63)
             # book name
-            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11), wraplength=140)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 25), wraplength=180)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
             self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
-            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
+            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="black"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
 
             # author name
-            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
+            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 15), anchor="sw")
             self.bookAuthor.grid(row=1, column=0)
 
             # add to cart
             # add to cart
-            self.cartbutton = tk.Button(self.txt, text="add to cart", width=12, height=1,
-                                        command=lambda b_id=id: [self.add_to_cart(username, b_id, "mainwindow")])
+            self.cartbutton = tkk.Button(self.txt, text="add to cart", width=12,
+                                        command=lambda b_id=id: [self.add_to_cart(username, b_id, "mainwindow")],
+                                         style= "success")
             self.cartbutton.grid(row=2, column=0)
 
             # Create a label for each book and store it in the dictionary
-            self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 10), wraplength=140)
+            self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 15), wraplength=140)
             self.added_labels[id].grid(row=3, column=0, pady=5)
 
             i += 1
