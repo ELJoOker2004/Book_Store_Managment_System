@@ -928,7 +928,7 @@ class Gui():
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
             self.cart_confirm_button = tk.Button(cart_window, text="Confirm The purchase", font=("Comic Sans MS", 12),
-                                                 foreground="blue", command=lambda: self.buy(username, books))
+                                                 foreground="blue", command=lambda: buy(username, books))
             self.cart_confirm_button.place(x=500, y=800)
             self.cart_clear_button = tk.Button(cart_window, text="Empty Cart", font=("Comic Sans MS", 12),
                                                foreground="red", command=lambda: emptycart())
@@ -953,8 +953,27 @@ class Gui():
                     self.cartframe.destroy()
                     self.cartwindow(username, self.cart)
 
-    def buy(self, username, books):
-        pass
+        def buy(username, books):
+            conn = sqlite3.connect('book_store.db')
+            c = conn.cursor()
+            for book in books:
+                book = list(book)
+                c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book[3], ) )
+                c.fetchone()
+                c.execute("SELECT books_owned FROM users WHERE username = ?", (username,))
+                userbooks = c.fetchone()
+                userbooksstr = ""
+                for i in userbooks:
+                    userbooksstr += str(i)
+                userbooksstr = userbooksstr + "," +str(book[3])
+                c.execute("UPDATE users SET books_owned = ? WHERE username = ?", (userbooksstr,username,))
+                c.fetchone()
+                c.execute("INSERT INTO purchases (book_id, buyer_username) VALUES (?, ?)", (book[3], username,))
+                c.fetchone()
+                conn.commit()
+            conn.close()
+            cart_window.destroy()
+            self.profile(username)
 
     def bookInfo(self,book):
         self.destruction()
