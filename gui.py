@@ -278,7 +278,7 @@ class Gui():
         self.loginWindow.title('Login')
         self.loginWindow.resizable(False, False)
 
-        self.app = Application("topbar.gif",25,50,master=self.loginWindow)
+        self.app = Application("resources/topbar.gif",25,50,master=self.loginWindow)
         self.app.pack()
 
         # Then create a frame for the labels and entries
@@ -339,7 +339,7 @@ class Gui():
             pass
         self.destruction()
         self.loginWindow.title('Create Account')
-        self.app = Application("welcome-anime.gif",22,90, master=self.loginWindow)
+        self.app = Application("resources/welcome-anime.gif",22,90, master=self.loginWindow)
         self.app.pack()
 
         self.frame = tkk.Frame(self.loginWindow)
@@ -393,7 +393,7 @@ class Gui():
         self.login_button.destroy()
         self.invalid.destroy()
         self.loginWindow.title('Profile')
-        self.img = Image.open("download.jpeg")
+        self.img = Image.open("resources/download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
         self.img = ImageTk.PhotoImage(self.img)
@@ -464,7 +464,7 @@ class Gui():
             self.unauthorized.pack(fill="both",side="bottom",padx=320)
             self.login_Window()
         self.loginWindow.title('Admin Page')
-        self.img = Image.open("download.jpeg")
+        self.img = Image.open("resources/download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
         self.img = ImageTk.PhotoImage(self.img)
@@ -472,7 +472,7 @@ class Gui():
         self.imglabel = tkk.Label(self.loginWindow, image=self.img)
         self.imglabel.pack(anchor='nw')
         # Open the sign out icon image
-        self.signout_img = Image.open("leaving.png")
+        self.signout_img = Image.open("resources/leaving.png")
         self.signout_img = self.signout_img.resize((70, 70))  # Resize the image
         self.signout_img = ImageTk.PhotoImage(self.signout_img)
 
@@ -566,10 +566,10 @@ class Gui():
             # Create a new style that inherits from 'TButton', and overrides the background option
             style.configure('TButton', background='white')
 
-            plus_image = Image.open("plus.png")
+            plus_image = Image.open("resources/plus.png")
             plus_image = plus_image.resize((20, 20))
             plus_image = ImageTk.PhotoImage(plus_image)
-            minus_image = Image.open("minus.png")
+            minus_image = Image.open("resources/minus.png")
             minus_image = minus_image.resize((20, 20))
             minus_image = ImageTk.PhotoImage(minus_image)
 
@@ -735,7 +735,7 @@ class Gui():
         self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
-        img = Image.open("profile.png")
+        img = Image.open("resources/profile.png")
         img = img.resize((130, 200))
         self.tk_img = ImageTk.PhotoImage(img)  # Store the image object in an instance variable
         profile_button = tkk.Button(self.loginWindow, command=open_link_1, image=self.tk_img)

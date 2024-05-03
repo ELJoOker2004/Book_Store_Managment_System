@@ -13,7 +13,7 @@ class Application(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.gif = tkk.PhotoImage(file="topbar.gif")
+        self.gif = tkk.PhotoImage(file="resources/topbar.gif")
         self.label = tkk.Label(self, image=self.gif)
         self.label.pack()
         self.update_gif(0)
@@ -159,7 +159,7 @@ class gui():
         self.login_button.destroy()
         self.invalid.destroy()
 
-        self.img = Image.open("download.jpeg")
+        self.img = Image.open("resources/download.jpeg")
         # Resize the image
         self.img = self.img.resize((100, 100))
         self.img = ImageTk.PhotoImage(self.img)
