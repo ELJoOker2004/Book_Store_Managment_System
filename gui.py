@@ -382,6 +382,22 @@ class Gui():
             self.scrollbar_h.destroy()
         except Exception as e:
             pass
+        try:
+            self.cart_img.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.back_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -687,6 +703,7 @@ class Gui():
 
     def mainWindow(self,username):
         # List of image paths
+        self.destruction()
         folder = "images\\"
         image_paths = []
         images_from_db = db.get_images_From_market()
@@ -823,6 +840,14 @@ class Gui():
         self.profile_button = tkk.Button(self.loginWindow, command=lambda  : self.profile(username),bootstyle="link", image=self.profile_img)
         self.profile_button.place(x=0, y=0)
 
+        self.cart_img = Image.open("resources/face.png")
+        self.cart_img = self.cart_img.resize((40, 40))
+        self.cart_img = ImageTk.PhotoImage(self.cart_img)  # Store the image object in an instance variable
+        self.cart_button = tkk.Button(self.loginWindow, command=lambda: self.cartwindow(username, self.cart),
+                                      bootstyle="link",
+                                      image=self.cart_img)
+        self.cart_button.place(x=0, y=50)
+
         # sign out button
         self.sign_out_img = Image.open("resources/leaving.png")
         self.sign_out_img = self.sign_out_img.resize((50, 50))
@@ -837,8 +862,99 @@ class Gui():
             self.db_quantities[id] -= 1
             self.cart.append(item)
             self.added_labels[id].config(text="Added Successfully", fg="green")
+            self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
         else:
             self.added_labels[id].config(text="Out Of Stock", fg="red")
+            self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+
+    def cartwindow(self, username, cart):
+        cart_window = tk.Toplevel(self.loginWindow)
+        cart_window.title('Cart Window')
+        cart_window.geometry("800x900")
+        cart_window.resizable(False, False)
+
+        self.cartframe = tk.Frame(cart_window)
+        self.cartframe.pack(side="top")
+
+        self.header = tk.Label(self.cartframe, text="CART", fg="black")
+        self.header.config(font=("Times New Roman", 40))
+        self.header.pack()
+        self.cartcanvas = tk.Canvas(cart_window, width=700, height=500)  # Adjust width and height as needed
+        self.scrollbar = tk.Scrollbar(cart_window, orient="vertical", command=self.cartcanvas.yview)
+        self.scrollbar_h = tk.Scrollbar(cart_window, orient="horizontal", command=self.cartcanvas.xview)
+        self.cartcanvas.config(yscrollcommand=self.scrollbar.set, xscrollcommand=self.scrollbar_h.set)
+
+        self.scrollbar.pack(side="right", fill="y")
+        self.scrollbar_h.pack(side="bottom", fill="x")
+        self.cartcanvas.pack(side="left", fill="both", expand=True, pady=20)
+
+        # Create a frame inside the canvas to hold the images
+        self.cartimage_frame = tk.Frame(self.cartcanvas)
+        self.cartcanvas.create_window((0, 0), window=self.cartimage_frame, anchor="nw")
+
+        # Add images to the image frame
+        self.cartimages = []
+        k = 0
+        a = 0  # For two columns, initialize j as 0
+        ids = []
+        for i in cart:
+            ids.append(i[1])
+        books = db.get_books_by_id(ids)
+        if len(books) > 0:
+            for bookNamedb, bookCoverdb, Quantitydb, Bookid in books:
+                bookCoverdb = "images\\" + bookCoverdb
+                img = Image.open(bookCoverdb)
+                img = img.resize((130, 200))
+                tk_img = ImageTk.PhotoImage(img)
+                self.cartimages.append(tk_img)
+                self.cartlabel = tkk.Label(self.cartimage_frame, image=tk_img)
+                self.cartlabel.grid(row=k, column=a, pady=10)
+
+                self.txtcart = tk.Frame(self.cartimage_frame)
+                self.txtcart.grid(row=k, column=a + 1, padx=63)
+                # book name
+                self.cartbookName = tk.Label(self.txtcart, text=bookNamedb, font=("Times New Roman", 11),
+                                             wraplength=140)
+                self.cartbookName.grid(row=0, column=0, pady=10)
+
+                self.remove_from_cart = tk.Button(self.txtcart, text="remove from cart",
+                                                  command=lambda c_id=Bookid: [remove_from_cart(username, c_id)])
+                self.remove_from_cart.grid(row=2, column=0)
+
+                k += 1
+                if k % 3 == 0:  # Change to 6 for two columns, adjust as needed
+                    k = 0
+                    a += 2  # Move to the next column for the next set of books
+            self.cartimage_frame.update_idletasks()
+            self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
+            self.cart_confirm_button = tk.Button(cart_window, text="Confirm The purchase", font=("Comic Sans MS", 12),
+                                                 foreground="blue", command=lambda: self.buy(username, books))
+            self.cart_confirm_button.place(x=500, y=800)
+            self.cart_clear_button = tk.Button(cart_window, text="Empty Cart", font=("Comic Sans MS", 12),
+                                               foreground="red", command=lambda: emptycart())
+            self.cart_clear_button.place(x=250, y=800)
+        else:
+            self.empty_massage = tkk.Label(self.cartimage_frame, text="No Books Found", foreground="Red",
+                                           font=("Times New Roman", 50))
+            self.empty_massage.grid(row=0, column=0, pady=350, padx=150)
+
+        def emptycart():
+            self.cart = []
+            cart_window.destroy()
+            self.cartframe.destroy()
+            self.cartwindow(username, self.cart)
+
+        def remove_from_cart(username, id):
+            removeitem = [username, id]
+            for i in self.cart:
+                if i[0] == removeitem[0] and i[1] == removeitem[1]:
+                    self.cart.remove(i)
+                    cart_window.destroy()
+                    self.cartframe.destroy()
+                    self.cartwindow(username, self.cart)
+
+    def buy(self, username, books):
+        pass
 
     def bookInfo(self,book):
         self.destruction()
