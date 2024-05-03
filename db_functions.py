@@ -257,3 +257,33 @@ def change_role(role, username):
 
     conn.commit()  # Commit the changes
     conn.close()
+def delete_book(id):
+    db_path = "book_store.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM books WHERE id = ?", (id,))
+    user = cursor.fetchone()
+    conn.commit()
+    conn.close()
+
+def show_members():
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+
+    # Get all users
+    c.execute("SELECT username, name, books_owned, role FROM users")
+    users = c.fetchall()
+
+    conn.close()
+    return users
+
+def change_role(role, username):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+
+    # Update the role of the specified user
+    c.execute("UPDATE users SET role = ? WHERE username = ?", (role, username))
+
+    conn.commit()  # Commit the changes
+    conn.close()

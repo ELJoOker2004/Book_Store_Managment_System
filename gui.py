@@ -28,6 +28,7 @@ class Application(tk.Frame):
 class Gui():
     def __init__(self, root):
         self.loginWindow = root
+        self.cart = []
         self.login_Window()
 
     def open_new_window(self,username):
@@ -563,33 +564,14 @@ class Gui():
 
     def mainWindow(self,username):
         # List of image paths
-        image_paths = [
-            ("D:\\python\\images\\to kill a mocking bird.png","To Kill a Mocking Bird", "Harper Lee"),
-            ("D:\\python\\images\inheritance games.jpeg", "The Inheritance Games", "Jennifer Lynn Barnes"), 
-            ("D:\\python\\images\great expdition.jpeg", "The Great Expedtiton","Charles Dickens"),
-            ("D:\\python\\images\cant touch me.jpeg", "Cant't Touch Me ", "David Goggins"),
-            ("D:\\python\\images\\book thief.jpeg", "The Book Thief", "Markus Zusak"),
-            ("D:\\python\\images\\48 laws of power.jpg","48 Laws of Power", "Robert Greene"),
-            ("D:\\python\\images\\art of war.png","The art of War", "Sun Tzu"),
-            ("D:\\python\\images\pride and pejudice.jpeg", "Pride and Prejudice", "Jane Austen"),
-            ("D:\\python\\images\\the hobbit.jpeg", "The Hobbit", "J.J.R. Tolkien"),
-            ("D:\\python\\images\moby dick.jpeg", "Moby Dick ", "Herman Melvilla"),
-            ("D:\\python\\images\\rich dad poor dad.jpeg", "Ruch Dad Poor Dad", "Robert T. Kiyosaki"),
-            ("D:\\python\images\lord of the rings.jpeg","Lord if the Rings", "J.J.R. Tolkien"),
-            ("D:\\python\\images\\Angels-demons.jpeg", "Angels and Demons", "Dan Brown"),
-            ("D:\\python\\images\\alchemist.jpeg", "The Alchemist", "Paulo Coelho"),
-            ("D:\\python\\images\\life of pi.jpeg", " Th Life of Pi", "Yann Martel"),
-            ("D:\\python\\images\\martian.jpeg", "The Martian", "Andy Weir"),
-            ("D:\\python\\images\\takle of 2 cities.jpeg", "The Take of Two Cities", "Charles Dickens"),
-            ("D:\\python\\images\\girl on the train.jpeg","The Girl on the Train", "Pawla Hawkins"),
-            ("D:\\python\\images\\davinci code.jpeg", "The Da-vinci Code", "Dan Brown"),
-            ("D:\\python\\images\\the nightingale.jpeg", "The Nightingale", "Kristin Hannah"),
-            ("D:\\python\\images\\hunger games.jpeg", "The Hunger Games", "Suzanne Collins"),
-            ("D:\\python\\images\\wimpy kid.jpeg","Diary of a Wimpy Kid", "Jeff Kinney"),
-            ("D:\\python\\images\\musketeers.jpeg", "The Three Musketeers", "Alexandre Dumas"),
-            ("D:\\python\\images\\kite rinner.jpeg", "The Kite Runner", "Khaled Hosseni")
-        ]
-        # Create the scrollable image frame
+        folder = "images\\"
+        image_paths = []
+        images_from_db = db.get_images_From_market()
+        for image in images_from_db:
+            image = list(image)
+            image[0] = folder + image[0]
+            image_paths.append(image)
+
         #scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
         #scrollable_frame.pack(fill="both", expand=True)
         # Header frame and text
@@ -599,8 +581,6 @@ class Gui():
         header = tk.Label(topframe, text="WELCOME BACK", fg="black")
         header.config(font=("Times New Roman", 40))
         header.pack()
-        global cart
-        cart = []
 
         # ----------------------------------------------
         #sdlkjghdfg;ldkjsfhg 
@@ -654,7 +634,7 @@ class Gui():
             # add to cart
             # add to cart
             cart = tkk.Button(txt, text="add to cart", width=12, bootstyle="dark",
-                              command=lambda: add_to_cart(username, id))
+                              command=lambda: self.add_to_cart(username, id))
             cart.grid(row=i + 20, column=100)
 
             i += 150
@@ -688,7 +668,7 @@ class Gui():
             bookAuthor.grid(row=i + 10, column=100 + j)
 
             # add to cart
-            cart = tk.Button(txt, text="add to cart", width=12, height=1, command=lambda: add_to_cart(username, id))
+            cart = tk.Button(txt, text="add to cart", width=12, height=1, command=lambda: self.add_to_cart(username, id))
             cart.grid(row=i + 20, column=100 + j)
 
             i += 150
@@ -747,9 +727,9 @@ class Gui():
         sign_out_button = tk.Button(self.loginWindow, text="sign out", command=open_link_1, width=9, height=1, bg="#ffffff")
         sign_out_button.place(x=620, y=25)
 
-        def add_to_cart(user_name, id):
-            item = [user_name, id]
-            cart.append(item)
-            print(cart)
+    def add_to_cart(self,user_name, id):
+        item = [user_name, id]
+        self.cart.append(item)
+        print(self.cart)
 
 
