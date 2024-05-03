@@ -124,7 +124,7 @@ class Gui():
         cover_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
         cover_entry.grid(row=1, column=1)
 
-        quantity_label = tkk.Label(new_window, text="Quantity", font=("Comic Sans MS", 12))
+        quantity_label = tkk.Label(new_window, text="Quantity (Positive Number)", font=("Comic Sans MS", 12))
         quantity_label.grid(row=2, column=0)
         quantity_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
         quantity_entry.grid(row=2, column=1)
@@ -173,7 +173,7 @@ class Gui():
         cover_entry.insert(0, book_cover)
         cover_entry.grid(row=1, column=1)
 
-        quantity_label = tkk.Label(new_window, text="Quantity", font=("Comic Sans MS", 12))
+        quantity_label = tkk.Label(new_window, text="Quantity (Positive Number)", font=("Comic Sans MS", 12))
         quantity_label.grid(row=2, column=0)
         quantity_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
         quantity_entry.insert(0, book_quantity)

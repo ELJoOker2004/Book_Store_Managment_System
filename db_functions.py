@@ -216,7 +216,11 @@ def increase_book(book_id):
 def decrease_book(book_id):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
+    if get_book_quantity(book_id)[0] >0:
+        print(get_book_quantity(book_id)[0])
+        c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
+    else:
+        return False
     conn.commit()
     conn.close()
 
