@@ -134,20 +134,76 @@ class Gui():
         author_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
         author_entry.grid(row=3, column=1)
 
+        description_label = tkk.Label(new_window, text="Description", font=("Comic Sans MS", 12))
+        description_label.grid(row=4, column=0)
+        description_entry = tkk.Text(new_window, font=("Comic Sans MS", 10), width=50, height=7)
+        description_entry.grid(row=4, column=1,pady=1)
+
         # Function to add the book to the database
         def add_book_to_db():
             name = name_entry.get()
             cover = cover_entry.get()
             quantity = quantity_entry.get()
             author = author_entry.get()
-            db.add_book(name, cover, quantity,author)
+            description = description_entry.get("1.0", "end").strip()
+            db.add_book(name, cover, quantity,author,description)
 
         # Create an 'Add Book' button
         add_button = tk.Button(new_window, text="Add Book", font=("Comic Sans MS", 12), foreground="blue",
                                command=lambda:[add_book_to_db(),new_window.destroy(),self.admin(username)])
-        add_button.grid(row=4, column=0, columnspan=2)
+        add_button.grid(row=5, column=0, columnspan=2)
 
-    
+    def edit_book_window(self, username, book_id, book_name, book_cover, book_quantity, author,description):
+        # Create a new window
+        new_window = tk.Toplevel(self.loginWindow)
+        new_window.title('Edit Book')
+
+        # Create labels and entry fields for book details
+        # Pre-fill the entry fields with the current details of the book
+        name_label = tkk.Label(new_window, text="Book Name", font=("Comic Sans MS", 12))
+        name_label.grid(row=0, column=0)
+        name_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
+        name_entry.insert(0, book_name)
+        name_entry.grid(row=0, column=1)
+
+        cover_label = tkk.Label(new_window, text="Cover Path (prefer relative path to the app directory)",
+                                font=("Comic Sans MS", 12))
+        cover_label.grid(row=1, column=0)
+        cover_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
+        cover_entry.insert(0, book_cover)
+        cover_entry.grid(row=1, column=1)
+
+        quantity_label = tkk.Label(new_window, text="Quantity", font=("Comic Sans MS", 12))
+        quantity_label.grid(row=2, column=0)
+        quantity_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
+        quantity_entry.insert(0, book_quantity)
+        quantity_entry.grid(row=2, column=1)
+
+        author_label = tkk.Label(new_window, text="Author", font=("Comic Sans MS", 12))
+        author_label.grid(row=3, column=0)
+        author_entry = tkk.Entry(new_window, font=("Comic Sans MS", 10))
+        author_entry.insert(0, author)
+        author_entry.grid(row=3, column=1)
+
+        description_label = tkk.Label(new_window, text="Description", font=("Comic Sans MS", 12))
+        description_label.grid(row=4, column=0)
+        description_entry = tkk.Text(new_window, font=("Comic Sans MS", 10), width=50, height=7)
+        description_entry.insert('1.0', description)
+        description_entry.grid(row=4, column=1,pady=10)
+        # Function to update the book in the database
+        def update_book_in_db():
+            new_name = name_entry.get()
+            new_cover = cover_entry.get()
+            new_quantity = quantity_entry.get()
+            new_author = author_entry.get()
+            new_description = description_entry.get("1.0", "end").strip()
+            db.edit_book(book_id, new_name, new_cover, int(new_quantity), new_author,new_description)
+
+        # Create an 'Edit Book' button
+        edit_button = tk.Button(new_window, text="Edit Book", font=("Comic Sans MS", 12), foreground="blue",
+                                command=lambda: [update_book_in_db(), new_window.destroy(), self.admin(username)])
+        edit_button.grid(row=5, column=0, columnspan=2)
+
     def login_Window(self):
         ds.destruction(self)
         self.loginWindow.geometry('800x900')
@@ -417,7 +473,7 @@ class Gui():
         self.remove_book_button = tk.Button(self.loginWindow, text="Remove Book", font=("Comic Sans MS", 12),foreground="blue", command=lambda:self.open_new_window(username))
         self.remove_book_button.place(x=270, y=115)
         self.refresh_button = tk.Button(self.loginWindow, text="Refresh", font=("Comic Sans MS", 12), foreground="blue",command=lambda: self.admin(username))
-        self.refresh_button.place(x=675, y=115)
+        self.refresh_button.place(x=725, y=115)
         self.centerFrame = tk.Frame(self.loginWindow, width=1250, height=15, borderwidth=2)
         self.centerFrame.pack()
         self.frame2 = Frame(self.loginWindow)
@@ -455,14 +511,24 @@ class Gui():
         booklist = db.get_books()  # This should return a list of tuples with book info
 
         for i, book in enumerate(booklist):
-            book_id, book_name, book_cover, book_quantity,author = book
+            book_id, book_name, book_cover, book_quantity,author,description = book
+
+            temp_cover=book_cover
             book_cover="images\\"+book_cover
             # Open, resize, and display the book cover
             img = Image.open(book_cover)
             img = img.resize((150, 200))  # Resize the image
             img = ImageTk.PhotoImage(img)
             img_label = tk.Label(self.scrollable_frame, image=img)
-            img_label.image = img  # Keep a reference to the image
+            img_label.image = img
+
+            # Bind the function to the image label
+            img_label.bind("<Button-1>", lambda event, command = lambda b_id=book_id,b_name=book_name,b_cover=temp_cover,b_q=book_quantity,b_aut=author,b_des=description: self.edit_book_window(username, b_id, b_name, b_cover, b_q, b_aut,b_des): command())
+
+
+              # Don't forget to pack (or grid/place) the label
+
+            # Keep a reference to the image
 
             # Create a label to display the book name
             #quantity_label = tk.Label(scrollable_frame, text=str(book_quantity), font=("Comic Sans MS", 15), fg="black")

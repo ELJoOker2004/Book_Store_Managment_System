@@ -171,17 +171,24 @@ def isAdmin(username):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-def add_book(name, cover, quantity,author):
+def add_book(name, cover, quantity,author,description):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("INSERT INTO books (name, cover, quantity,author) VALUES (?, ?, ?,?)", (name, cover, quantity,author))
+    c.execute("INSERT INTO books (name, cover, quantity,author,descreption) VALUES (?, ?, ?,?,?)", (name, cover, quantity,author,description))
     conn.commit()
     conn.close()
+def edit_book(book_id, name, cover, quantity, author, description):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute(" UPDATE books SET name = ?, cover = ?, quantity = ?, author = ?, descreption = ? WHERE id = ?", (name, cover, quantity, author, description, book_id))
+    conn.commit()
+    conn.close()
+
 
 def get_books():
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("SELECT id,name, cover, quantity,author FROM books")
+    c.execute("SELECT id,name, cover, quantity,author,descreption FROM books")
     books = c.fetchall()
     conn.close()
     return books
