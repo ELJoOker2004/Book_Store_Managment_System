@@ -821,11 +821,12 @@ class Gui():
         self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
         self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
         self.sign_out_button.place(x=740, y=0)
-
+        self.db_quantities = db.check_item_quantity()
+        self.db_quantities = dict(self.db_quantities)
     def add_to_cart(self, user_name, id):
         item = [user_name, id]
-        item_check = db.check_item_quantity(item)
-        if item_check:
+        if (self.db_quantities[id] > 0):
+            self.db_quantities[id] -= 1
             self.cart.append(item)
             self.added_labels[id].config(text="Added Successfully", fg="green")
         else:
