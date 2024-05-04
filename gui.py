@@ -212,7 +212,8 @@ class Gui():
 
         self.app = Application("resources/topbar.gif",25,50,master=self.loginWindow)
         self.app.pack()
-
+        self.loginWindow.bind("<MouseWheel>",
+                              lambda event: None)
         # Then create a frame for the labels and entries
         self.frame = tk.Frame(self.loginWindow)
         self.frame.pack(expand=True)
@@ -276,7 +277,8 @@ class Gui():
 
         self.frame = tkk.Frame(self.loginWindow)
         self.frame.pack(expand=True)
-
+        self.loginWindow.bind("<MouseWheel>",
+                              lambda event: None)
         self.newname_label = tkk.Label(self.frame, text="Full name:")
         self.newname_label.grid(row=0, column=0, padx=5, pady=5)
         self.newname_entry = tkk.Entry(self.frame)
@@ -364,10 +366,10 @@ class Gui():
         self.scrollable_frame = tk.Frame(self.canvas)
 
         # Bind the scroll wheel event to the yview_scroll method
-        self.canvas.bind("<MouseWheel>",
+        self.loginWindow.bind("<MouseWheel>",
                          lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
-        self.canvas.bind("<Button-4>", lambda event: self.canvas.yview_scroll(int(-1), "units"))  # For Linux
-        self.canvas.bind("<Button-5>", lambda event: self.canvas.yview_scroll(int(1), "units"))  # For Linux
+        # self.loginWindow.bind("<Button-4>", lambda event: self.canvas.yview_scroll(int(-1), "units"))  # For Linux
+        # self.loginWindow.bind("<Button-5>", lambda event: self.canvas.yview_scroll(int(1), "units"))  # For Linux
 
         # Configure the canvas to be scrollable
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
@@ -499,10 +501,10 @@ class Gui():
         self.canvas.configure(yscrollcommand=self.scrollbar.set)
 
         # Bind the scroll wheel event to the yview_scroll method
-        self.canvas.bind("<MouseWheel>",
-                    lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))  # For Windows
-        self.canvas.bind("<Button-4>", lambda event: self.canvas.yview_scroll(int(-1), "units"))  # For Linux
-        self.canvas.bind("<Button-5>", lambda event: self.canvas.yview_scroll(int(1), "units"))  # For Linux
+        # Bind the scroll wheel event to the root window
+        self.loginWindow.bind("<MouseWheel>",
+                              lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)),
+                                                                     "units"))  # For Windows
 
         # Place the canvas and the scrollbar in the frame
         self.canvas.pack(side="left", fill="both", expand=True)
@@ -535,6 +537,13 @@ class Gui():
 
             book_label = tk.Label(self.scrollable_frame, text=f"ID: {book_id}\n{book_name} \n Quantity:{str(book_quantity)}\nAuthor:{author}", font=("Comic Sans MS", 15), fg="black",
                                   wraplength=150)
+            book_label.bind("<Button-1>", lambda event,
+                                                command=lambda b_id=book_id, b_name=book_name, b_cover=temp_cover,
+                                                               b_q=book_quantity, b_aut=author,
+                                                               b_des=description: self.edit_book_window(username, b_id,
+                                                                                                        b_name, b_cover,
+                                                                                                        b_q, b_aut,
+                                                                                                        b_des): command())
 
             # Determine the row and column for each book
             row = i // 2  # Integer division - each row will contain two books
@@ -608,6 +617,9 @@ class Gui():
         # Create a frame inside the canvas to hold the images
         self.image_frame = tk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
+        self.loginWindow.bind("<MouseWheel>",
+                              lambda event: self.canvas.yview_scroll(int(-1 * (event.delta / 120)),
+                                                                     "units"))  # For Windows
 
         # Add images to the image frame
         self.images = []
@@ -633,8 +645,6 @@ class Gui():
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
             self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
-            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="black"))
-            self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
 
             # author name
             self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 15), anchor="sw")
@@ -763,6 +773,10 @@ class Gui():
         # Create a frame inside the canvas to hold the images
         self.cartimage_frame = tk.Frame(self.cartcanvas)
         self.cartcanvas.create_window((0, 0), window=self.cartimage_frame, anchor="nw")
+        self.cartcanvas.bind_all("<MouseWheel>",
+                                 lambda event: self.cartcanvas.yview_scroll(int(-1 * (event.delta / 120)),
+                                                                            "units") if len(
+                                     self.cart) > 0 else None)  # For Windows
 
         # Add images to the image frame
         self.cartimages = []
@@ -797,7 +811,8 @@ class Gui():
                 self.remove_from_cart.grid(row=2, column=0)
 
                 k += 1
-                a+=1  # Move to the next column for the next set of books
+                a+=1
+                # Move to the next column for the next set of books
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
             self.cart_confirm_button = tkk.Button(self.cart_window, text="Confirm The purchase",
@@ -853,7 +868,8 @@ class Gui():
 
     def bookInfo(self, book, name, author, id,username,place=False):
         ds.destruction(self)
-
+        self.loginWindow.bind("<MouseWheel>",
+                              lambda event: None)
         self.canvas = tk.Canvas(self.loginWindow, width=800, height=900)
         self.scrollable_frame = tk.Frame(self.canvas)  # Create a new frame
 
