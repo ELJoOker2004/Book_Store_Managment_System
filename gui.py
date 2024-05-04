@@ -490,6 +490,7 @@ class Gui():
         self.centerFrame.pack()
         self.frame2 = Frame(self.loginWindow)
         self.frame2.pack(pady=20)
+        
         # Create a new frame
         self.frame = Frame(self.loginWindow)
         self.frame.pack(fill='both', expand=True)  # Adjust the fill and expand options
@@ -896,25 +897,25 @@ class Gui():
         img = img.resize((300, 400))
         self.tk_img2 = ImageTk.PhotoImage(img)
         photo = tk.Label(self.scrollable_frame, image=self.tk_img2)  # Add the label to the frame
-        photo.pack(side="top")
+        photo.pack(side="top",anchor="n",padx= 250)
 
         # book name detail
         bookName = tk.Label(self.scrollable_frame, text=f"Book Name: {name}", font=("Times New Roman", 14),
                             justify="center")
-        bookName.pack(side="top")
+        bookName.pack(side="top", anchor="n")
 
         # author name detail
         authorName = tk.Label(self.scrollable_frame, text=f"Author Name: {author}", font=("Times New Roman", 14),
                               justify="center")
-        authorName.pack(side="top")
+        authorName.pack(side="top",anchor="n")
 
         # release date detail
         releaseDate = tk.Label(self.scrollable_frame, text="Release Year: 1978", justify="center",
                                font=("Times New Roman", 14))
-        releaseDate.pack(side="top")
+        releaseDate.pack(side="top",anchor="n")
 
         line = tk.Label(self.scrollable_frame, text="-" * 128, justify="left")
-        line.pack(side="top")
+        line.pack(side="top",anchor="n")
 
         describe = str(db.get_book_descreption(id)[0])
 
