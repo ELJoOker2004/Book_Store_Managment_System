@@ -609,8 +609,7 @@ class Gui():
 
         # ----------------------------------------------
         # sdlkjghdfg;ldkjsfhg
-        def open_link_1():
-            webbrowser.open("https://www.example1.com")
+
 
             # Create a canvas and scrollbar
 
@@ -648,17 +647,20 @@ class Gui():
             self.images.append(tk_img)
             self.label = tk.Label(self.image_frame, image=tk_img)
             self.label.grid(row=row, column=col, pady=10)
+            self.label.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
+
 
             self.txt = tk.Frame(self.image_frame)
             self.txt.grid(row=row, column=col + 1, padx=46)
             # book name
-            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 20), wraplength=160)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 15), wraplength=160)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
             self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
-
+            self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
+            self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
             # author name
-            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 15), anchor="sw")
+            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 12), anchor="sw")
             self.bookAuthor.grid(row=1, column=0)
 
             # add to cart
@@ -718,14 +720,14 @@ class Gui():
         #self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
-        self.profile_img = Image.open("resources/profile.png")
+        self.profile_img = Image.open("resources/face.png")
         self.profile_img = self.profile_img.resize((40, 40))
         self.profile_img = ImageTk.PhotoImage(self.profile_img)  # Store the image object in an instance variable
         self.profile_button = tkk.Button(self.loginWindow, command=lambda: self.profile(username), bootstyle="link",
                                          image=self.profile_img)
         self.profile_button.place(x=0, y=0)
 
-        self.cart_img = Image.open("resources/face.png")
+        self.cart_img = Image.open("resources/cart.png")
         self.cart_img = self.cart_img.resize((40, 40))
         self.cart_img = ImageTk.PhotoImage(self.cart_img)  # Store the image object in an instance variable
         self.cart_button = tkk.Button(self.loginWindow, command=lambda: self.cartwindow(username, self.cart),
