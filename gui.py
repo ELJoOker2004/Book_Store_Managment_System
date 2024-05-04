@@ -340,6 +340,16 @@ class Gui():
         self.signout_button.image = self.signout_img
         # Place the sign out button at the top right of the window
         self.signout_button.place(relx=1, rely=0, anchor='ne')
+        self.market_img = Image.open("resources/market.jpeg")
+        self.market_img = self.market_img.resize((70, 70))  # Resize the image
+        self.market_img = ImageTk.PhotoImage(self.market_img)
+
+        # Create a button with the sign out icon
+        self.market_button = tk.Button(self.loginWindow, image=self.market_img, command=lambda: self.mainWindow(username),
+                                        highlightthickness=0, bd=0)
+        self.market_button.image = self.market_img
+        # Place the sign out button at the top right of the window
+        self.market_button.place(x=660,y=0)
 
         userlist = db.searchByUsername(username)
 

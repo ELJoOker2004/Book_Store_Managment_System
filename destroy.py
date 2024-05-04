@@ -334,3 +334,7 @@ def destruction(self):
         self.ownedbookslabel.destroy()
     except Exception as e:
         pass
+    try:
+        self.market_button.destroy()
+    except Exception as e:
+        pass
