@@ -382,6 +382,102 @@ class Gui():
             self.scrollbar_h.destroy()
         except Exception as e:
             pass
+        try:
+            self.cart_img.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.back_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartframe.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.header.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartcanvas.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartbutton.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_window.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartimage_frame.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar_h.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartlabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.txtcart.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartbookName.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.remove_from_cart.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_clear_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.empty_massage.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cartlabel.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_confirm_button.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.cart_window.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar1.destroy()
+        except Exception as e:
+            pass
+        try:
+            self.scrollbar_h1.destroy()
+        except Exception as e:
+            pass
     def login_Window(self):
         self.destruction()
         self.loginWindow.geometry('800x900')
@@ -683,10 +779,10 @@ class Gui():
             minus_button = tkk.Button(self.scrollable_frame, image=minus_image,bootstyle="link",command=lambda b_id=book_id: [db.decrease_book(b_id), self.admin(username)])
             minus_button.image = minus_image
             minus_button.grid(row=row, column=column*2+3)
-    
 
-    def mainWindow(self,username):
+    def mainWindow(self, username):
         # List of image paths
+        self.destruction()
         folder = "images\\"
         image_paths = []
         images_from_db = db.get_images_From_market()
@@ -695,8 +791,8 @@ class Gui():
             image[0] = folder + image[0]
             image_paths.append(image)
 
-        #scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
-        #scrollable_frame.pack(fill="both", expand=True)
+        # scrollable_frame = MainWindow(self.loginWindow, image_paths, username)
+        # scrollable_frame.pack(fill="both", expand=True)
         # Header frame and text
         self.topframe = tk.Frame(self.loginWindow)
         self.topframe.pack(side="top")
@@ -706,10 +802,9 @@ class Gui():
         self.header.pack()
 
         # ----------------------------------------------
-        #sdlkjghdfg;ldkjsfhg 
+        # sdlkjghdfg;ldkjsfhg
         def open_link_1():
             webbrowser.open("https://www.example1.com")
-        
 
             # Create a canvas and scrollbar
 
@@ -745,13 +840,12 @@ class Gui():
             self.txt = tk.Frame(self.image_frame)
             self.txt.grid(row=i, column=j + 1, padx=63)
             # book name
-            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11),wraplength=140)
+            self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 11), wraplength=140)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
             self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path: self.bookInfo(b_cover,name,author): command())
             self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
-
 
             # author name
             self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 10), anchor="sw")
@@ -767,7 +861,6 @@ class Gui():
             self.added_labels[id] = tk.Label(self.txt, font=("Times New Roman", 10), wraplength=140)
             self.added_labels[id].grid(row=3, column=0, pady=5)
 
-
             i += 1
             if i % 4 == 0:  # Change to 6 for two columns, adjust as needed
                 i = 0
@@ -779,55 +872,65 @@ class Gui():
 
         # -------------------------------------------------------------------
         # search bar
-        self.searchbar = tk.Frame(self.topframe, width=1200, height=100)
-        self.searchbar.pack(side="bottom", fill="both")
-        self.lbl_search = tk.Label(self.searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
-        self.lbl_search.grid(row=0, column=0)
-        self.ent_search = tk.Entry(self.searchbar, width=90)
+        #self.searchbar = tk.Frame(self.topframe, width=1200, height=100)
+        #self.searchbar.pack(side="bottom", fill="both")
+        #self.lbl_search = tk.Label(self.searchbar, text="Search", font="Times 12 bold", bg="grey", fg="white")
+        #self.lbl_search.grid(row=0, column=0)
+        #self.ent_search = tk.Entry(self.searchbar, width=90)
+        #
+        #def on_entry_click(event):
+        #    """Function to handle when the user clicks inside the entry."""
 
-        def on_entry_click(event):
-            """Function to handle when the user clicks inside the entry."""
+        #    if self.ent_search.get() == "Search Here":
+        #        self.ent_search.delete(0, tk.END)  # Clear the placeholder text
+        #        self.ent_search.config(fg='black')  # Change text color to black
 
-            if self.ent_search.get() == "Search Here":
-                self.ent_search.delete(0, tk.END)  # Clear the placeholder text
-                self.ent_search.config(fg='black')  # Change text color to black
+        #def on_focus_out(event):
+        #    """Function to handle when the self.ent_search loses focus."""
 
-        def on_focus_out(event):
-            """Function to handle when the self.ent_search loses focus."""
+        #    if self.ent_search.get() == "":
+        #        self.ent_search.insert(0, "Search Here")  # Restore placeholder text
+        #        self.ent_search.config(fg='grey')  # Change text color to grey
 
-            if self.ent_search.get() == "":
-                self.ent_search.insert(0, "Search Here")  # Restore placeholder text
-                self.ent_search.config(fg='grey')  # Change text color to grey
+        #def search():
+        #   """Function to handle the search."""
 
-        def search():
-            """Function to handle the search."""
+        #   search_term = self.ent_search.get()
+        #  print("Searching for:", search_term)
 
-            search_term = self.ent_search.get()
-            print("Searching for:", search_term)
-
-        self.ent_search.bind("<FocusIn>", on_entry_click)
-        self.ent_search.bind("<FocusOut>", on_focus_out)
+        #self.ent_search.bind("<FocusIn>", on_entry_click)
+        #self.ent_search.bind("<FocusOut>", on_focus_out)
 
         # search button
-        self.search_button = tk.Button(self.searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
-        self.search_button.grid(row=0, column=0, padx=10, pady=5)
+        #self.search_button = tk.Button(self.searchbar, text="Search", command=search, width=7, height=1, bg="#217afa")
+        #self.search_button.grid(row=0, column=0, padx=10, pady=5)
 
         # Perform search operation here
-        self.ent_search.insert(0, "Search here")
-        self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
+        #self.ent_search.insert(0, "Search here")
+        #self.ent_search.grid(row=0, column=1, columnspan=3, padx=10, pady=10)
 
         # profile button
         self.profile_img = Image.open("resources/profile.png")
         self.profile_img = self.profile_img.resize((40, 40))
         self.profile_img = ImageTk.PhotoImage(self.profile_img)  # Store the image object in an instance variable
-        self.profile_button = tkk.Button(self.loginWindow, command=lambda  : self.profile(username),bootstyle="link", image=self.profile_img)
+        self.profile_button = tkk.Button(self.loginWindow, command=lambda: self.profile(username), bootstyle="link",
+                                         image=self.profile_img)
         self.profile_button.place(x=0, y=0)
+
+        self.cart_img = Image.open("resources/face.png")
+        self.cart_img = self.cart_img.resize((40, 40))
+        self.cart_img = ImageTk.PhotoImage(self.cart_img)  # Store the image object in an instance variable
+        self.cart_button = tkk.Button(self.loginWindow, command=lambda: self.cartwindow(username, self.cart),
+                                      bootstyle="link",
+                                      image=self.cart_img)
+        self.cart_button.place(x=0, y=50)
 
         # sign out button
         self.sign_out_img = Image.open("resources/leaving.png")
         self.sign_out_img = self.sign_out_img.resize((50, 50))
         self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
-        self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link",image=self.sign_out_img, command=open_link_1)
+        self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link", image=self.sign_out_img,
+                                          command=lambda: self.login_Window())
         self.sign_out_button.place(x=740, y=0)
         self.db_quantities = db.check_item_quantity()
         self.db_quantities = dict(self.db_quantities)
@@ -837,6 +940,7 @@ class Gui():
             self.db_quantities[id] -= 1
             self.cart.append(item)
             self.added_labels[id].config(text="Added Successfully", fg="green")
+            self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
         else:
             self.added_labels[id].config(text="Out Of Stock", fg="red")
 

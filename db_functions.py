@@ -295,3 +295,13 @@ def check_item_quantity():
     quantity = c.fetchall()
     conn.close()
     return quantity
+def get_books_by_id(cartids):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    books = []
+    for cartid in cartids:
+        c.execute("SELECT name, cover, quantity, id FROM books WHERE id = ?", (cartid,))
+        book = c.fetchone()
+        books.append(book)
+    conn.close()
+    return books
