@@ -294,14 +294,14 @@ class Gui():
         self.password_entry = tkk.Entry(self.frame, show="•")
         self.password_entry.grid(row=2, column=1, padx=5, pady=5)
         self.signup_button = tkk.Button(self.frame, text="Sign Up",command=lambda: self.check_username(self.username_entry, self.password_entry,self.newname_entry), width=7, bootstyle="success")
-        self.signup_button.grid(row=3, column=0, columnspan=1,padx= 5, pady=10)
+        self.signup_button.grid(row=3, column=1, columnspan=1,padx= 5, pady=10)
         self.loginWindow.bind("<Return>", lambda event: self.check_username(self.username_entry, self.password_entry,self.newname_entry))
         self.duplicate = tkk.Label(self.frame, text="", foreground="red")
         self.duplicate.grid(row=4, column=0, columnspan=3, pady=5)
         self.success = tkk.Label(self.frame, text="", foreground="green")
         self.success.grid(row=5, columnspan=2, pady=5, column=0)
         self.tologin_button = tkk.Button(self.frame, text="Login", command=lambda: self.login_Window(), width=7,bootstyle="dark")
-        self.tologin_button.grid(row=3, column=1, columnspan=1,padx= 5, pady=10,)
+        self.tologin_button.grid(row=3, column=0, columnspan=1,padx= 5, pady=10,)
 
     def check_username(self, username, password, name):
         username = username.get().strip()
@@ -331,7 +331,7 @@ class Gui():
         self.imglabel.pack(anchor='nw')
         # Open the sign out icon image
         self.signout_img = Image.open("resources/leaving.png")
-        self.signout_img = self.signout_img.resize((70, 70))  # Resize the image
+        self.signout_img = self.signout_img.resize((90, 90))  # Resize the image
         self.signout_img = ImageTk.PhotoImage(self.signout_img)
 
         # Create a button with the sign out icon
@@ -341,7 +341,7 @@ class Gui():
         # Place the sign out button at the top right of the window
         self.signout_button.place(relx=1, rely=0, anchor='ne')
         self.market_img = Image.open("resources/market.jpeg")
-        self.market_img = self.market_img.resize((70, 70))  # Resize the image
+        self.market_img = self.market_img.resize((90, 90))  # Resize the image
         self.market_img = ImageTk.PhotoImage(self.market_img)
 
         # Create a button with the sign out icon
@@ -349,7 +349,7 @@ class Gui():
                                         highlightthickness=0, bd=0)
         self.market_button.image = self.market_img
         # Place the sign out button at the top right of the window
-        self.market_button.place(x=660,y=0)
+        self.market_button.place(x=610,y=0)
 
         userlist = db.searchByUsername(username)
 
@@ -461,7 +461,7 @@ class Gui():
         self.imglabel.pack(anchor='nw')
         # Open the sign out icon image
         self.signout_img = Image.open("resources/leaving.png")
-        self.signout_img = self.signout_img.resize((70, 70))  # Resize the image
+        self.signout_img = self.signout_img.resize((90, 90))  # Resize the image
         self.signout_img = ImageTk.PhotoImage(self.signout_img)
 
         # Create a button with the sign out icon
@@ -781,7 +781,7 @@ class Gui():
         # self.header = tk.Label(self.cartframe, text="CART", fg="black")
         # self.header.config(font=("Times New Roman", 40))
         # self.header.pack()
-        self.header1 = Application("resources/costco-fun.gif", 22, 90, master=self.cart_window)
+        self.header1 = Application("resources/costco-fun.gif", 33, 90, master=self.cart_window)
         self.header1.pack()
         self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=300)  # Adjust width and height as needed
         self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
