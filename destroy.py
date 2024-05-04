@@ -151,6 +151,10 @@ def destruction(self):
     except Exception as e:
         pass
     try:
+        self.header1.destroy()
+    except Exception as e:
+        pass
+    try:
         self.searchbar.destroy()
     except Exception as e:
         pass

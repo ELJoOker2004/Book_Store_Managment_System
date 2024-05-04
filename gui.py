@@ -781,8 +781,8 @@ class Gui():
         # self.header = tk.Label(self.cartframe, text="CART", fg="black")
         # self.header.config(font=("Times New Roman", 40))
         # self.header.pack()
-        self.header = Application("resources/costco-fun.gif", 22, 90, master=self.cart_window)
-        self.header.pack()
+        self.header1 = Application("resources/costco-fun.gif", 22, 90, master=self.cart_window)
+        self.header1.pack()
         self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=300)  # Adjust width and height as needed
         self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
         self.cartcanvas.config(yscrollcommand=self.scrollbar1.set, xscrollcommand=self.scrollbar_h.set)
