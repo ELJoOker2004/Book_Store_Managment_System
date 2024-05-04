@@ -850,9 +850,12 @@ class Gui():
             for i in self.cart:
                 if i[0] == removeitem[0] and i[1] == removeitem[1]:
                     self.cart.remove(i)
+                    self.db_quantities = db.check_item_quantity()
+                    self.db_quantities = dict(self.db_quantities)
                     self.cart_window.destroy()
                     self.cartframe.destroy()
                     self.cartwindow(username, self.cart)
+                    break
 
         def buy(username, books):
             conn = sqlite3.connect('book_store.db')
