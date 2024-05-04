@@ -171,17 +171,24 @@ def isAdmin(username):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-def add_book(name, cover, quantity,author):
+def add_book(name, cover, quantity,author,description):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("INSERT INTO books (name, cover, quantity,author) VALUES (?, ?, ?,?)", (name, cover, quantity,author))
+    c.execute("INSERT INTO books (name, cover, quantity,author,descreption) VALUES (?, ?, ?,?,?)", (name, cover, quantity,author,description))
     conn.commit()
     conn.close()
+def edit_book(book_id, name, cover, quantity, author, description):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute(" UPDATE books SET name = ?, cover = ?, quantity = ?, author = ?, descreption = ? WHERE id = ?", (name, cover, quantity, author, description, book_id))
+    conn.commit()
+    conn.close()
+
 
 def get_books():
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("SELECT id,name, cover, quantity,author FROM books")
+    c.execute("SELECT id,name, cover, quantity,author,descreption FROM books")
     books = c.fetchall()
     conn.close()
     return books
@@ -193,7 +200,7 @@ def get_user_books(username):
     books_ids = c.fetchall()
     user_books = []
     for book_id in books_ids:
-        c.execute("SELECT name, cover, quantity FROM books WHERE id = ?", (book_id[0],))
+        c.execute("SELECT id,name, cover, quantity,author,descreption FROM books WHERE id = ?", (book_id[0],))
         book = c.fetchone()
         user_books.append(book)
     conn.close()
@@ -209,7 +216,11 @@ def increase_book(book_id):
 def decrease_book(book_id):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
-    c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
+    if get_book_quantity(book_id)[0] >0:
+        print(get_book_quantity(book_id)[0])
+        c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book_id,))
+    else:
+        return False
     conn.commit()
     conn.close()
 
@@ -305,3 +316,10 @@ def get_books_by_id(cartids):
         books.append(book)
     conn.close()
     return books
+def get_book_descreption(id):
+    conn = sqlite3.connect('book_store.db')
+    c = conn.cursor()
+    c.execute("SELECT descreption FROM books WHERE id = ?", (id,))
+    book = c.fetchone()
+    conn.close()
+    return book
