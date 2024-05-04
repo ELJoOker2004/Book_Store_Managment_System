@@ -272,7 +272,7 @@ class Gui():
             pass
         ds.destruction(self)
         self.loginWindow.title('Create Account')
-        self.app = Application("resources/welcome-anime.gif",22,90, master=self.loginWindow)
+        self.app = Application("resources/welcome.gif",22,90, master=self.loginWindow)
         self.app.pack()
 
         self.frame = tkk.Frame(self.loginWindow)
@@ -603,9 +603,12 @@ class Gui():
         self.topframe = tk.Frame(self.loginWindow)
         self.topframe.pack(side="top")
 
-        self.header = tk.Label(self.topframe, text="WELCOME BACK", fg="black")
-        self.header.config(font=("Times New Roman", 40))
+        # self.header = tk.Label(self.topframe, text="WELCOME BACK", fg="black")
+        # self.header.config(font=("Times New Roman", 40))
+        # self.header.pack()
+        self.header = Application("resources/download.gif", 22, 90, master=self.loginWindow)
         self.header.pack()
+
 
         # ----------------------------------------------
         # sdlkjghdfg;ldkjsfhg
@@ -613,8 +616,11 @@ class Gui():
 
             # Create a canvas and scrollbar
 
-        self.centerFrame = tk.Frame(self.loginWindow, width=1250, height=17, borderwidth=2)
-        self.centerFrame.pack()
+        # self.centerFrame = tk.Frame(self.loginWindow, width=500, height=50, borderwidth=2, background="black")
+        # self.centerFrame.pack(side="top")
+
+        # self.centerFrame = tkk.Label(self.loginWindow, text="", background="black",font= ("Comic Sans MS", 1))
+        # self.centerFrame.pack(fill="both")
         self.canvas = tk.Canvas(self.loginWindow, width=700, height=500)  # Adjust width and height as needed
         self.scrollbar = tk.Scrollbar(self.loginWindow, orient="vertical", command=self.canvas.yview)
         self.scrollbar_h = tk.Scrollbar(self.loginWindow, orient="horizontal", command=self.canvas.xview)
@@ -721,27 +727,27 @@ class Gui():
 
         # profile button
         self.profile_img = Image.open("resources/face.png")
-        self.profile_img = self.profile_img.resize((40, 40))
+        self.profile_img = self.profile_img.resize((55, 55))
         self.profile_img = ImageTk.PhotoImage(self.profile_img)  # Store the image object in an instance variable
         self.profile_button = tkk.Button(self.loginWindow, command=lambda: self.profile(username), bootstyle="link",
                                          image=self.profile_img)
         self.profile_button.place(x=0, y=0)
 
         self.cart_img = Image.open("resources/cart.png")
-        self.cart_img = self.cart_img.resize((40, 40))
+        self.cart_img = self.cart_img.resize((55, 55))
         self.cart_img = ImageTk.PhotoImage(self.cart_img)  # Store the image object in an instance variable
         self.cart_button = tkk.Button(self.loginWindow, command=lambda: self.cartwindow(username, self.cart),
                                       bootstyle="link",
                                       image=self.cart_img)
-        self.cart_button.place(x=0, y=50)
+        self.cart_button.place(x=0, y=70)
 
         # sign out button
         self.sign_out_img = Image.open("resources/leaving.png")
-        self.sign_out_img = self.sign_out_img.resize((50, 50))
+        self.sign_out_img = self.sign_out_img.resize((80, 80))
         self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
         self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link", image=self.sign_out_img,
                                           command=lambda: self.login_Window())
-        self.sign_out_button.place(x=740, y=0)
+        self.sign_out_button.place(x=710, y=15)
         self.db_quantities = db.check_item_quantity()
         self.db_quantities = dict(self.db_quantities)
     def add_to_cart(self, user_name, id, place):
@@ -772,8 +778,10 @@ class Gui():
         self.cartframe = tk.Frame(self.cart_window)
         self.cartframe.pack(side="top")
 
-        self.header = tk.Label(self.cartframe, text="CART", fg="black")
-        self.header.config(font=("Times New Roman", 40))
+        # self.header = tk.Label(self.cartframe, text="CART", fg="black")
+        # self.header.config(font=("Times New Roman", 40))
+        # self.header.pack()
+        self.header = Application("resources/costco-fun.gif", 22, 90, master=self.cart_window)
         self.header.pack()
         self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=300)  # Adjust width and height as needed
         self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
