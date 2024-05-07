@@ -478,7 +478,7 @@ class Gui():
         self.namelabel = tkk.Label(self.loginWindow, text=userlist[1], font=("Comic Sans MS", 15), foreground="black")
         self.namelabel.place(x=130, y=45)
         self.manage_members_button = tk.Button(self.loginWindow, text="Manage Members", font=("Comic Sans MS", 12),foreground="blue", command=lambda: self.open_members_window(username))
-        self.manage_members_button.place(x=5, y=115)
+        self.manage_members_button.place(x=10, y=115)
         self.add_book_button = tk.Button(self.loginWindow, text="Add New Book",font=("Comic Sans MS", 12),foreground="blue", command=lambda: self.add_book_window(username))
         self.add_book_button.place(x=150, y=115)
 
@@ -653,7 +653,8 @@ class Gui():
             self.images.append(tk_img)
             self.label = tk.Label(self.image_frame, image=tk_img)
             self.label.grid(row=row, column=col, pady=10)
-            self.label.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
+            self.label.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username
+            , b_name = book_name, b_author = book_author: self.bookInfo(b_cover,b_name,b_author,a_id,usernamet): command())
 
 
             self.txt = tk.Frame(self.image_frame)
@@ -662,7 +663,8 @@ class Gui():
             self.bookName = tk.Label(self.txt, text=name, font=("Times New Roman", 15), wraplength=160)
             self.bookName.grid(row=0, column=0, pady=10)
             # hyperlinks of books names
-            self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username: self.bookInfo(b_cover,name,author,a_id,usernamet): command())
+            self.bookName.bind("<Button-1>", lambda event, command = lambda b_cover=image_path, a_id = id, usernamet = username
+            , b_name = book_name, b_author = book_author: self.bookInfo(b_cover,b_name,b_author,a_id,usernamet): command())
             self.bookName.bind("<Enter>", self.bookName.config(cursor="hand2", fg="blue"))
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
             # author name
@@ -745,9 +747,11 @@ class Gui():
         self.sign_out_img = Image.open("resources/leaving.png")
         self.sign_out_img = self.sign_out_img.resize((80, 80))
         self.sign_out_img = ImageTk.PhotoImage(self.sign_out_img)
+        # self.sign_out_img = Application("resources/tenor1.gif", 5, 120, master=self.loginWindow)
+        # self.sign_out_img.place(x= 700, y=20)
         self.sign_out_button = tkk.Button(self.loginWindow, bootstyle="link", image=self.sign_out_img,
-                                          command=lambda: self.login_Window())
-        self.sign_out_button.place(x=710, y=15)
+                                           command=lambda: self.login_Window())
+        self.sign_out_button.place(x=710, y=20)
         self.db_quantities = db.check_item_quantity()
         self.db_quantities = dict(self.db_quantities)
     def add_to_cart(self, user_name, id, place):
@@ -923,9 +927,9 @@ class Gui():
         authorName.pack(side="top",anchor="n")
 
         # release date detail
-        releaseDate = tk.Label(self.scrollable_frame, text="Release Year: 1978", justify="center",
-                               font=("Times New Roman", 14))
-        releaseDate.pack(side="top",anchor="n")
+        # releaseDate = tk.Label(self.scrollable_frame, text="Release Year: 1978", justify="center",
+        #                        font=("Times New Roman", 14))
+        # releaseDate.pack(side="top",anchor="n")
 
         line = tk.Label(self.scrollable_frame, text="-" * 128, justify="left")
         line.pack(side="top",anchor="n")

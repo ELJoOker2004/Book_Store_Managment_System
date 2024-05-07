@@ -342,3 +342,8 @@ def destruction(self):
         self.market_button.destroy()
     except Exception as e:
         pass
+    try:
+        self.sign_out_img1.destroy()
+    except Exception as e:
+        pass
+
