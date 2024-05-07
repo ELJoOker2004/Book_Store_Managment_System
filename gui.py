@@ -685,15 +685,16 @@ class Gui():
         self.cart_window.resizable(False, False)
 
         self.cartframe = tk.Frame(self.cart_window)
-        self.cartframe.pack(side="top")
-        self.header1 = Gif("resources/costco-fun.gif", 33, 90, master=self.cart_window)
+        self.cartframe.pack(side="top", fill="both", expand=True)
+
+        self.header1 = Gif("resources/costco-fun.gif", 33, 90, master=self.cartframe)
         self.header1.pack()
-        self.cartcanvas = tk.Canvas(self.cart_window, width=700, height=300)  # Adjust width and height as needed
-        self.scrollbar1 = tk.Scrollbar(self.cart_window, orient="vertical", command=self.cartcanvas.yview)
+
+        self.cartcanvas = tk.Canvas(self.cartframe, width=700, height=300)  # Adjust width and height as needed
+        self.scrollbar1 = tk.Scrollbar(self.cartframe, orient="vertical", command=self.cartcanvas.yview)
         self.cartcanvas.config(yscrollcommand=self.scrollbar1.set, xscrollcommand=self.scrollbar_h.set)
 
         self.scrollbar1.pack(side="right", fill="y")
-
         self.cartcanvas.pack(side="left", fill="both", expand=True, pady=20)
 
         # Create a frame inside the canvas to hold the images
@@ -702,7 +703,7 @@ class Gui():
         self.cartcanvas.bind_all("<MouseWheel>",
                                  lambda event: self.cartcanvas.yview_scroll(int(-1 * (event.delta / 120)),
                                                                             "units") if len(
-                                     self.cart) > 0 else None)
+                                     self.cart) > 0 else None)  # For Windows
 
         # Add images to the image frame
         self.cartimages = []
@@ -732,32 +733,38 @@ class Gui():
                 self.cartbookName.grid(row=0, column=0, pady=10)
 
                 self.remove_from_cart = tkk.Button(self.txtcart, text="remove from cart",
-                                                  command=lambda c_id=Bookid: [remove_from_cart(username, c_id)]
-                                                   ,style="danger",width=15)
+                                                   command=lambda c_id=Bookid: [remove_from_cart(username, c_id)]
+                                                   , style="danger", width=15)
                 self.remove_from_cart.grid(row=2, column=0)
 
                 k += 1
-                a+=1
+                a += 1
                 # Move to the next column for the next set of books
             self.cartimage_frame.update_idletasks()
             self.cartcanvas.config(scrollregion=self.cartcanvas.bbox("all"))
-            self.cart_confirm_button = tkk.Button(self.cart_window, text="Confirm The purchase",
-                                                  command=lambda: buy(username, books)
-                                                 ,style="success",width=20)
-            self.cart_confirm_button.place(x=500, y=800)
-            self.cart_clear_button = tkk.Button(self.cart_window, text="Empty Cart", command=lambda: emptycart(),
-                                                style="warning")
-            self.cart_clear_button.place(x=250, y=800)
         else:
             self.empty_massage = tkk.Label(self.cartimage_frame, text="No Books Found", foreground="Red",
                                            font=("Times New Roman", 50))
             self.empty_massage.grid(row=0, column=0, pady=350, padx=150)
+
+        self.bottomFrame = tk.Frame(self.cart_window)
+        self.bottomFrame.pack(side="bottom", fill="x")
+
+        self.cart_confirm_button = tkk.Button(self.bottomFrame, text="Confirm The purchase",
+                                              command=lambda: buy(username, books)
+                                              , style="success", width=20)
+        self.cart_confirm_button.pack(side="left", padx=170)
+
+        self.cart_clear_button = tkk.Button(self.bottomFrame, text="Empty Cart", command=lambda: emptycart(),
+                                            style="warning")
+        self.cart_clear_button.pack(side="left", padx=40)
 
         def emptycart():
             self.cart = []
             self.db_quantities = db.check_item_quantity()
             self.db_quantities = dict(self.db_quantities)
             self.cart_window.destroy()
+            self.cartcanvas.unbind_all("<MouseWheel>")
             self.cartframe.destroy()
             self.cartwindow(username, self.cart)
 
@@ -768,7 +775,6 @@ class Gui():
                     self.cart.remove(i)
                     self.db_quantities = db.check_item_quantity()
                     self.db_quantities = dict(self.db_quantities)
-                    self.cartcanvas.unbind_all("<MouseWheel>")  # Unbind the mouse wheel event
                     self.cart_window.destroy()
                     self.cartframe.destroy()
                     self.cartwindow(username, self.cart)
@@ -793,7 +799,7 @@ class Gui():
                 c.fetchone()
                 conn.commit()
             conn.close()
-            self.cartcanvas.unbind_all("<MouseWheel>")  # Unbind the mouse wheel event
+            self.cartcanvas.unbind_all("<MouseWheel>")
             self.cart_window.destroy()
             self.profile(username)
 
