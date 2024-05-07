@@ -762,11 +762,14 @@ class Gui():
         self.cart_confirm_button = tkk.Button(self.bottomFrame, text="Confirm The purchase",
                                               command=lambda: buy(username, books)
                                               , style="success", width=20)
-        self.cart_confirm_button.pack(side="left", padx=170)
+        self.cart_confirm_button.pack(expand=True)
+
+        self.empty_massage1 = tkk.Label(self.bottomFrame, text="", foreground="red", font=("Times New Roman", 10))
+        self.empty_massage1.pack(expand=True)
 
         self.cart_clear_button = tkk.Button(self.bottomFrame, text="Empty Cart", command=lambda: emptycart(),
                                             style="warning")
-        self.cart_clear_button.pack(side="left", padx=40)
+        self.cart_clear_button.pack(expand=True)
 
         def emptycart():
             self.cart = []
@@ -792,16 +795,29 @@ class Gui():
         def buy(username, books):
             conn = sqlite3.connect('book_store.db')
             c = conn.cursor()
+            c.execute("SELECT books_owned FROM users WHERE username = ?", (username,))
+            books_string_from_db = c.fetchall()
+            books_owned = []
+            if books_string_from_db[0][0]:
+                books_owned = list(books_string_from_db[0][0])
             for book in books:
                 book = list(book)
+                if str(book[3]) in books_owned:
+                    self.empty_massage1.config(text="Some Books Already owned", foreground="red")
+                    return False
                 c.execute("UPDATE books SET quantity = quantity - 1 WHERE id = ?", (book[3],))
                 c.fetchone()
                 c.execute("SELECT books_owned FROM users WHERE username = ?", (username,))
                 userbooks = c.fetchone()
+                if userbooks[0] == None:
+                    userbooks = list(userbooks)
+                    userbooks.pop()
                 userbooksstr = ""
                 for i in userbooks:
                     userbooksstr += str(i)
                 userbooksstr = userbooksstr + "," + str(book[3])
+                if userbooksstr[0] == ",":
+                    userbooksstr = userbooksstr[1:]
                 c.execute("UPDATE users SET books_owned = ? WHERE username = ?", (userbooksstr, username,))
                 c.fetchone()
                 c.execute("INSERT INTO purchases (book_id, buyer_username) VALUES (?, ?)", (book[3], username,))
@@ -810,6 +826,7 @@ class Gui():
             conn.close()
             self.cartcanvas.unbind_all("<MouseWheel>")
             self.cart_window.destroy()
+            emptycart()
             self.profile(username)
 
     def bookInfo(self, book, name, author, id,username,place=False):
