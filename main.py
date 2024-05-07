@@ -8,7 +8,7 @@ def troll():
     pygame.mixer.music.play(0)
 
 if __name__ == '__main__':
-    troll()
+    #troll()
     root = tkk.Window()
     app = gui.Gui(root)
     root.mainloop()

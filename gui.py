@@ -663,13 +663,22 @@ class Gui():
         item = [user_name, id]
         if (self.db_quantities[id] > 0):
             self.db_quantities[id] -= 1
-            self.cart.append(item)
             if (place == "mainwindow"):
-                self.added_labels[id].config(text="Added Successfully", fg="green")
-                self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text="", fg="black"))
+                if item in self.cart:
+                    self.added_labels[id].config(text="Already added", fg="red")
+                    self.added_labels[id].after(1500,lambda: self.added_labels[id].config(text=""))
+                else:
+                    self.cart.append(item)
+                    self.added_labels[id].config(text="Added to cart", fg="green")
+                    self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text=""))
             else:
-                self.feedback.config(text="Added Successfully", fg="green")
-                self.feedback.after(1500, lambda: self.feedback.config(text="", fg="black"))
+                if item in self.cart:
+                    self.feedback.config(text="Already added", fg="red")
+                    self.feedback.after(1500, lambda: self.feedback.config(text="", fg="black"))
+                else:
+                    self.cart.append(item)
+                    self.feedback.config(text="Added to cart", fg="green")
+                    self.feedback.after(1500, lambda: self.feedback.config(text="", fg="black"))
         else:
             if (place == "mainwindow"):
                 self.added_labels[id].config(text="Out Of Stock", fg="red")
