@@ -1,44 +1,5 @@
 import sqlite3
 import hashlib
-def insertRowInTable(name):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    #Insert rows into the table
-    cursor.execute("INSERT INTO users (name) VALUES (?, ?)", (name,))
-
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
-
-def insertRowInTable(name):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    #Insert rows into the table
-    cursor.execute("INSERT INTO users (name) VALUES (?, ?)", (name,))
-
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
-
-def deleteRowInTable(username):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    cursor.execute("DELETE FROM users WHERE username = ?", (username,))
-    user = cursor.fetchone()
-    if user:
-        print(f"Row with username {username} deleted successfully.")
-    else:
-        print(f"couldn't find row with username {username}.")
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
-
 
 def searchByUsername(n):
     db_path = "book_store.db"
@@ -93,50 +54,9 @@ def checkUserduplicates(username):
         return True
     else:
         return False
-def printRowInTable(n):
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
 
-    cursor.execute(f"SELECT * FROM users WHERE username = ?", (n,))
-    row = cursor.fetchone()
-
-    if row:
-
-        print(f"Name: {row[2]}")
-
-    else:
-        print(f"No record found for {n}.")
-
-    # Commit changes and close the connection
-    conn.commit()
-    conn.close()
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
-
-def login():
-    db_path = "book_store.db"
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    username = input("Enter your username: ")
-    password = input("Enter your password: ")
-    hashed_password = hash_password(password)
-
-    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, hashed_password))
-    user = cursor.fetchone()
-
-    conn.close()
-
-    try:
-        if user:
-            print("Login successful!")
-        else:
-            print("Login failed. Please check your username and password.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-
-
 
 def add_user(username, password,name):
     if (username == "" or password == "" or name == ""):
@@ -177,13 +97,13 @@ def add_book(name, cover, quantity,author,description):
     c.execute("INSERT INTO books (name, cover, quantity,author,descreption) VALUES (?, ?, ?,?,?)", (name, cover, quantity,author,description))
     conn.commit()
     conn.close()
+
 def edit_book(book_id, name, cover, quantity, author, description):
     conn = sqlite3.connect('book_store.db')
     c = conn.cursor()
     c.execute(" UPDATE books SET name = ?, cover = ?, quantity = ?, author = ?, descreption = ? WHERE id = ?", (name, cover, quantity, author, description, book_id))
     conn.commit()
     conn.close()
-
 
 def get_books():
     conn = sqlite3.connect('book_store.db')
