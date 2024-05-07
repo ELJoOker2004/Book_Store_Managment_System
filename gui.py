@@ -665,7 +665,7 @@ class Gui():
             self.db_quantities[id] -= 1
             if (place == "mainwindow"):
                 if item in self.cart:
-                    self.added_labels[id].config(text="Already added", fg="red")
+                    self.added_labels[id].config(text="Already added", fg="chartreuse3")
                     self.added_labels[id].after(1500,lambda: self.added_labels[id].config(text=""))
                 else:
                     self.cart.append(item)
@@ -673,7 +673,7 @@ class Gui():
                     self.added_labels[id].after(1500, lambda: self.added_labels[id].config(text=""))
             else:
                 if item in self.cart:
-                    self.feedback.config(text="Already added", fg="red")
+                    self.feedback.config(text="Already added", fg="chartreuse3")
                     self.feedback.after(1500, lambda: self.feedback.config(text="", fg="black"))
                 else:
                     self.cart.append(item)
