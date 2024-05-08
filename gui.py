@@ -404,7 +404,7 @@ class Gui():
             self.bookName.bind("<Leave>", lambda event: self.bookName.config(cursor="arrow", fg="black"))
 
             # author name
-            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 12), anchor="sw")
+            self.bookAuthor = tk.Label(self.txt, text=f"By: {author}", font=("Times New Roman italic", 12), anchor="sw",wraplength=150)
             self.bookAuthor.grid(row=1, column=0)
 
             self.bookDetails = tk.Button(self.txt, text="Book Details", width=12, height=1,
